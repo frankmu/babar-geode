@@ -1,13 +1,20 @@
 package com.babar.geode.test.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;;
+import javax.annotation.PostConstruct;
 
-@RestController
+import org.springframework.beans.factory.annotation.Autowired;
+import com.babar.geode.test.repository.ProductRepository;
+import org.springframework.stereotype.Controller;
+
+@Controller
 public class BabarTestController {
-	@RequestMapping("test")
-	public String test(@RequestParam(value="name", required=false, defaultValue="world")String name) {
-		return "Test " + name;
+	
+	@PostConstruct
+	public String test() {
+		System.out.println("Get resion count: " + String.valueOf(productRepository.count()));
+		return String.valueOf(productRepository.count());
 	}
+
+	@Autowired
+	private ProductRepository productRepository;
 }
