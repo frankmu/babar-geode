@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @ComponentScan(value="com.babar.geode.rest")
 @ImportResource("client-cache.xml")
-public class BabarTestAppliation {
+public class BabarRestAppliation {
 	public static void main(String[] args) {
-		SpringApplication.run(BabarTestAppliation.class, args);
+		SpringApplication.run(BabarRestAppliation.class, args);
 	}
 }

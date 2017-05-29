@@ -20,7 +20,8 @@
     http://www.springframework.org/schema/data/repository/spring-repository.xsd">
 
 	<gfe:client-cache pool-name="gemfirePool" />
-	<gfe:client-region id="hello" pool-name="gemfirePool" />
+	<gfe:client-region id="resource" pool-name="gemfirePool" />
+	<gfe:client-region id="alert" pool-name="gemfirePool" />
 	
 	<gfe:pool id="gemfirePool">
 		<gfe:locator host="192.168.1.226" port="10334" />
