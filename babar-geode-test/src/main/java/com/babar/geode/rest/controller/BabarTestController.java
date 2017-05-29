@@ -1,10 +1,11 @@
-package com.babar.geode.test.controller;
+package com.babar.geode.rest.controller;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.babar.geode.test.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
+
+import com.babar.geode.rest.repository.ProductRepository;
 
 @Controller
 public class BabarTestController {

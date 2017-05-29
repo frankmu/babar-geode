@@ -27,5 +27,5 @@
 	</gfe:pool>
 	
 	<gfe:annotation-driven />
-	<gfe-data:repositories base-package="com.babar.geode.test.repository" />
+	<gfe-data:repositories base-package="com.babar.geode.rest.repository" />
 </beans>
