@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@ComponentScan(value="com.babar.geode.rest")
+@ComponentScan(value="com.babar.geode")
 @ImportResource("client-cache.xml")
 public class BabarRestAppliation {
 	public static void main(String[] args) {
