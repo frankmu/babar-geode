@@ -42,8 +42,8 @@ public class ConsumingChannelConfig {
 
   @Bean
   @ServiceActivator(inputChannel = "consumingChannel")
-  public CountDownLatchHandler countDownLatchHandler() {
-    return new CountDownLatchHandler();
+  public BabarKafkaConsumerHandler babarKafkaConsumerHandler() {
+    return new BabarKafkaConsumerHandler();
   }
 
   @SuppressWarnings("unchecked")
