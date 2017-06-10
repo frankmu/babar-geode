@@ -13,7 +13,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<babar.version>0.0.1-SNAPSHOT</babar.version>
 		<springboot.version>1.5.3.RELEASE</springboot.version>
-		<spring-integration-kafka.version>2.1.0.RELEASE</spring-integration-kafka.version>
 		<spring-kafka.version>1.2.1.RELEASE</spring-kafka.version>
 	</properties>
 	<modules>
