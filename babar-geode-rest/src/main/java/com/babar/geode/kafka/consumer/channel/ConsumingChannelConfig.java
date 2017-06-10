@@ -9,11 +9,13 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 public class ConsumingChannelConfig {
@@ -21,18 +23,31 @@ public class ConsumingChannelConfig {
 	@Value("${kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
-	@SuppressWarnings("unchecked")
+	@Value("${kafka.topic.partition.count}")
+	private int topicPartionCount;
+
+	@Value("${kafka.consumer.task.executor.core.pool.size}")
+	private int kafkaConsumerTaskExecutorCorePoolSize;
+
 	@Bean
 	KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory((ConsumerFactory<String, String>) consumerFactory());
-		factory.setConcurrency(3);
+		factory.setConsumerFactory(consumerFactory());
+		factory.setConcurrency(topicPartionCount);
+		factory.getContainerProperties().setConsumerTaskExecutor(consumerTaskExecutor());
 		return factory;
 	}
 
 	@Bean
-	public ConsumerFactory<?, ?> consumerFactory() {
+	public ConsumerFactory<String, String> consumerFactory() {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+	}
+	
+	@Bean
+	public AsyncListenableTaskExecutor consumerTaskExecutor() {
+		ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
+		tpte.setCorePoolSize(kafkaConsumerTaskExecutorCorePoolSize);
+		return tpte;
 	}
 
 	@Bean
