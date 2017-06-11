@@ -1,4 +1,4 @@
-package com.babar.geode.kafka.consumer.channel;
+package com.babar.geode.kafka.consumer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
-public class ConsumingChannelConfig {
+public class BabarKafkaConsumerConfig {
 
 	@Value("${kafka.bootstrap-servers}")
 	private String bootstrapServers;
@@ -63,7 +63,7 @@ public class ConsumingChannelConfig {
 	}
 
 	@Bean
-	public BabarKafkaConsumerHandler handler() {
-		return new BabarKafkaConsumerHandler();
+	public BabarKafkaConsumerListener handler() {
+		return new BabarKafkaConsumerListener();
 	}
 }
