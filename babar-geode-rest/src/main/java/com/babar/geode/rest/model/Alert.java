@@ -1,7 +1,6 @@
 package com.babar.geode.rest.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.data.annotation.Id;
@@ -17,145 +16,38 @@ public class Alert implements Serializable{
 	@Id
 	private Long sys_id;
 
-	private String id;
-	private String type;
-	private String subclass;
-	private String object;
-	private String value;
-	private String details;
-	private String condition;
-	private String source;
-	private String resource;
-	private String count;
-	private Date firstTime;
-	private Date lastTime;
-	
-	private String text;
-	private Long number;
-	private Date date;
+	private String alertUID;  //告警唯一标识 （例如alertFamily+alertObj+alertMsg）
+	private String alertFamily; //告警类别  (network,host,application,middleware,db,other)
+
+	private String alertSubClass;//告警子类（syslog，snmp，netflow...）
+	private String alertObj;//告警对象(ip or hostname)
+	private String alertValue;//告警值 （感觉没啥用，暂时保留）
+	private String alertMsg; //告警明细（处理后的message）
+	private String sourceMsg; //源消息
+	private String alertCondition; //告警条件（个人建议放在配置文件中）
+	private String alertFrom;  //告警来源 （网管主机【agent】的IP或hostname）
+	private String resourceID; //告警资源 （关联资源信息的外键）
+	private int    alertTally; //告警次数
+	private long   alertFirstTime; //告警最早产生时间 （压缩中的第一条的时间）
+	private long   alertLastTime; //告警最近产生时间   （压缩后最近的时间）
+	private long   faultTime;  //设备发生故障时间
+	private long   receiveTime; //收到或采集消息的时间，主要是为了计算系统在正常或高峰时处理一条告警所消耗的时间
+	// faultTime < receiveTime < alertfirstTime 
+	private int severity = 1; //告警级别 （ critical，major，minor，warning，normal，unkonwn）
+	private String alertKey; //提取的标签，例如interface,linkup,linkdown...
+	private String matchPolicy; // 匹配的预处理策略 （1对多）
+	private String enrichInfo; // 丰富信息
 
 	@PersistenceConstructor
 	public Alert() {
 		this.sys_id = COUNTER.incrementAndGet();
 	}
 
-	public String getId() {
-		return id;
+	public String getAlertMsg() {
+		return alertMsg;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getSubclass() {
-		return subclass;
-	}
-
-	public void setSubclass(String subclass) {
-		this.subclass = subclass;
-	}
-
-	public String getObject() {
-		return object;
-	}
-
-	public void setObject(String object) {
-		this.object = object;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
-	}
-
-	public String getCondition() {
-		return condition;
-	}
-
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public String getResource() {
-		return resource;
-	}
-
-	public void setResource(String resource) {
-		this.resource = resource;
-	}
-
-	public String getCount() {
-		return count;
-	}
-
-	public void setCount(String count) {
-		this.count = count;
-	}
-
-	public Date getFirstTime() {
-		return firstTime;
-	}
-
-	public void setFirstTime(Date firstTime) {
-		this.firstTime = firstTime;
-	}
-
-	public Date getLastTime() {
-		return lastTime;
-	}
-
-	public void setLastTime(Date lastTime) {
-		this.lastTime = lastTime;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Long getNumber() {
-		return number;
-	}
-
-	public void setNumber(Long number) {
-		this.number = number;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+	public void setAlertMsg(String alertMsg) {
+		this.alertMsg = alertMsg;
 	}
 }

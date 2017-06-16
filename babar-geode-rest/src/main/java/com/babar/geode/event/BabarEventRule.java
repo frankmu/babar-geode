@@ -14,7 +14,7 @@ public class BabarEventRule {
 	private String action;
 	private int serverity;
 	private String nodeName;
-	private String ruletype;
+	private String ruleType;
 	private String matchPattern;
 	private List<String> variables;
 	private List<BabarEventRuleField> fields;
@@ -59,25 +59,25 @@ public class BabarEventRule {
 		return nodeName;
 	}
 
-	@XmlElement
+	@XmlElement(name="node-name")
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
 
-	public String getRuletype() {
-		return ruletype;
+	public String getRuleType() {
+		return ruleType;
 	}
 
-	@XmlElement
-	public void setRuletype(String ruletype) {
-		this.ruletype = ruletype;
+	@XmlElement(name="rule-type")
+	public void setRuleType(String ruleType) {
+		this.ruleType = ruleType;
 	}
 
 	public String getMatchPattern() {
 		return matchPattern;
 	}
 
-	@XmlElement
+	@XmlElement(name="match-pattern")
 	public void setMatchPattern(String matchPattern) {
 		this.matchPattern = matchPattern;
 	}
