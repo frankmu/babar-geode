@@ -16,7 +16,9 @@
 		<spring-kafka.version>1.2.1.RELEASE</spring-kafka.version>
 	</properties>
 	<modules>
+		<module>../babar-geode-common</module>
 		<module>../babar-geode-rest</module>
+		<module>../babar-geode-kafka</module>
 	</modules>
 	<build>
 		<pluginManagement>

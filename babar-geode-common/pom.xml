@@ -1,24 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>babar-geode</groupId>
 		<artifactId>babar-geode-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../babar-geode-parent/pom.xml</relativePath>
 	</parent>
+	<artifactId>babar-geode-common</artifactId>
 	<packaging>jar</packaging>
-	<artifactId>babar-geode-rest</artifactId>
+
+	<properties>
+		<exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
+		<spring-data-geode.version>1.0.0.INCUBATING-RELEASE</spring-data-geode.version>
+		<spring-shell.version>1.1.0.RELEASE</spring-shell.version>
+		<spring-data-gemfire.version>1.9.3.RELEASE</spring-data-gemfire.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
+			<artifactId>spring-boot-starter-data-gemfire</artifactId>
 			<version>${springboot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>babar-geode</groupId>
-			<artifactId>babar-geode-common</artifactId>
-			<version>${babar.version}</version>
 		</dependency>
 	</dependencies>
 

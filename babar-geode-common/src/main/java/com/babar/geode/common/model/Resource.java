@@ -1,4 +1,4 @@
-package com.babar.geode.rest.model;
+package com.babar.geode.common.model;
 
 import java.io.Serializable;
 import java.util.Date;
