@@ -1,4 +1,4 @@
-package com.babar.geode.event;
+package com.babar.geode.rule;
 
 public enum BabarEventType {
 	SYSLOG("syslog"), TRAP("trap");

@@ -1,13 +1,13 @@
-package com.babar.geode.rest.service;
+package com.babar.geode.kafka.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.babar.geode.rest.model.Alert;
-import com.babar.geode.rest.repository.AlertRepository;
+import com.babar.geode.common.model.Alert;
+import com.babar.geode.common.repository.AlertRepository;
 
 @Service
-public class BabarAlertService {
+public class BabarGeodeAlertService {
 
 	@Autowired
 	private AlertRepository alertRepository;

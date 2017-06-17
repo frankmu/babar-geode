@@ -26,7 +26,7 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
-import com.babar.geode.event.BabarEventRule;
+import com.babar.geode.rule.BabarEventRule;
 
 @Configuration
 public class BabarKafkaConsumerConfig {

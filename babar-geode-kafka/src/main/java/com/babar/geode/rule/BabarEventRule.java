@@ -1,4 +1,4 @@
-package com.babar.geode.event;
+package com.babar.geode.rule;
 
 import java.util.List;
 
