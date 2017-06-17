@@ -36,8 +36,7 @@ public class BabarLogProcessTask implements Runnable {
 	public void run() {
 		ObjectNode node = getJsonObjectNode();
 		if (node.has("message")) {
-			// System.out.println("message: " + node.get("message"));
-			processMessage(node.get("message").toString());
+			processMessage(node.get("message").textValue());
 		}
 	}
 
@@ -52,10 +51,8 @@ public class BabarLogProcessTask implements Runnable {
 	}
 
 	private void processMessage(String message){
-		//message = "Jun  9 09:55:05 192.168.0.131 263030: *Jun  9 10:16:22.732: xxx.xxx.xxx.xx %SNMP-3-AUTHFAIL: Authentication failure for SNMP req from host 192.168.1.18";
 		for (BabarEventRule rule : babarEventRules) {
 			if (message.matches(rule.getMatchPattern())) {
-				System.out.println("message: " + message);
 				Pattern pattern = Pattern.compile(rule.getMatchPattern());
 				Matcher matcher = pattern.matcher(message);
 				if (matcher.matches()) {
