@@ -12,7 +12,7 @@ public class BabarEventRule {
 	private String name;
 	private int priority;
 	private String action;
-	private int serverity;
+	private int severity;
 	private String nodeName;
 	private String ruleType;
 	private String matchPattern;
@@ -46,13 +46,13 @@ public class BabarEventRule {
 		this.action = action;
 	}
 
-	public int getServerity() {
-		return serverity;
+	public int getSeverity() {
+		return severity;
 	}
 
 	@XmlElement
-	public void setServerity(int serverity) {
-		this.serverity = serverity;
+	public void setSeverity(int severity) {
+		this.severity = severity;
 	}
 
 	public String getNodeName() {
