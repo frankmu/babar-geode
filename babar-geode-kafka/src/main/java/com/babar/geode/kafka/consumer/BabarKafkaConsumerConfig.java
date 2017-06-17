@@ -40,7 +40,10 @@ public class BabarKafkaConsumerConfig {
 	@Value("${kafka.consumer.task.executor.core.pool.size}")
 	private int kafkaConsumerTaskExecutorCorePoolSize;
 
-	@Value("classpath*:config/*.xml")
+	@Value("${worker.executor.core.pool.size}")
+	private int workerExecutorCorePoolSize;
+
+	@Value("${rule.files}")
 	private Resource[] files;
 
 	@Bean
@@ -84,7 +87,7 @@ public class BabarKafkaConsumerConfig {
 	@Bean
 	ThreadPoolTaskExecutor babarWorkerExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(10);
+		executor.setCorePoolSize(workerExecutorCorePoolSize);
 		return executor;
 	}
 
