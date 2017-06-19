@@ -73,6 +73,7 @@ public class BabarLogProcessTask implements Runnable {
 					}
 					babarGeodeAlertService.insertAlert(alert);
 					logger.info("Insert alert to database - message: " + message);
+					continue;
 				}
 			}
 		}
