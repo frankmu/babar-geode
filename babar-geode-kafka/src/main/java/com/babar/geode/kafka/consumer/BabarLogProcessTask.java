@@ -61,6 +61,9 @@ public class BabarLogProcessTask implements Runnable {
 						variableMap.put("$" + rule.getVairalbes().get(i), matcher.group(i + 1));
 					}
 					Alert alert = new Alert();
+					alert.setSeverity(rule.getSeverity());
+					alert.setSourceMsg(message);
+					alert.setMatchPolicy(rule.getName());
 					PropertyAccessor myAccessor = PropertyAccessorFactory.forBeanPropertyAccess(alert);
 					for (BabarEventRuleField field : rule.getFields()) {
 						String value = field.getValue();

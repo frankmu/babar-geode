@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:rule xmlns="http://www.example.org/babar-rule"
-	xmlns:tns="http://www.example.org/babar-rule"
+<rule xmlns="http://www.example.org/babar-rule"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.example.org/babar-rule babar-rule.xsd ">
 	<name>cisco-linkupdown</name>
@@ -18,5 +17,7 @@
 	</variables>
 	<fields>
 		<field key="alertMsg">$hostname on the $interfacename is down at $faulttime</field>
+		<field key="receiveTime">$logtime</field>
+		<field key="faultTime">$faulttime</field>
 	</fields>
-</tns:rule>
+</rule>

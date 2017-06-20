@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "rule")
+@XmlRootElement(name="rule", namespace="http://www.example.org/babar-rule")
 public class BabarEventRule {
 
 	private String name;
@@ -23,7 +23,7 @@ public class BabarEventRule {
 		return name;
 	}
 
-	@XmlElement
+	@XmlElement(namespace="http://www.example.org/babar-rule")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -32,7 +32,7 @@ public class BabarEventRule {
 		return priority;
 	}
 
-	@XmlElement
+	@XmlElement(namespace="http://www.example.org/babar-rule")
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
@@ -41,7 +41,7 @@ public class BabarEventRule {
 		return action;
 	}
 
-	@XmlElement
+	@XmlElement(namespace="http://www.example.org/babar-rule")
 	public void setAction(String action) {
 		this.action = action;
 	}
@@ -50,7 +50,7 @@ public class BabarEventRule {
 		return severity;
 	}
 
-	@XmlElement
+	@XmlElement(namespace="http://www.example.org/babar-rule")
 	public void setSeverity(int severity) {
 		this.severity = severity;
 	}
@@ -59,7 +59,7 @@ public class BabarEventRule {
 		return nodeName;
 	}
 
-	@XmlElement(name="node-name")
+	@XmlElement(name="node-name", namespace="http://www.example.org/babar-rule")
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
@@ -68,7 +68,7 @@ public class BabarEventRule {
 		return ruleType;
 	}
 
-	@XmlElement(name="rule-type")
+	@XmlElement(name="rule-type", namespace="http://www.example.org/babar-rule")
 	public void setRuleType(String ruleType) {
 		this.ruleType = ruleType;
 	}
@@ -77,7 +77,7 @@ public class BabarEventRule {
 		return matchPattern;
 	}
 
-	@XmlElement(name="match-pattern")
+	@XmlElement(name="match-pattern", namespace="http://www.example.org/babar-rule")
 	public void setMatchPattern(String matchPattern) {
 		this.matchPattern = matchPattern;
 	}
@@ -86,8 +86,8 @@ public class BabarEventRule {
 		return variables;
 	}
 
-	@XmlElementWrapper(name = "variables")
-	@XmlElement(name="variable")
+	@XmlElementWrapper(name = "variables", namespace="http://www.example.org/babar-rule")
+	@XmlElement(name="variable", namespace="http://www.example.org/babar-rule")
 	public void setVairalbes(List<String> variables) {
 		this.variables = variables;
 	}
@@ -96,8 +96,8 @@ public class BabarEventRule {
 		return fields;
 	}
 
-	@XmlElementWrapper(name = "fields")
-	@XmlElement(name="field")
+	@XmlElementWrapper(name = "fields", namespace="http://www.example.org/babar-rule")
+	@XmlElement(name="field", namespace="http://www.example.org/babar-rule")
 	public void setFields(List<BabarEventRuleField> fields) {
 		this.fields = fields;
 	}
