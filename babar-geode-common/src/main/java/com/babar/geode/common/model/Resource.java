@@ -15,7 +15,7 @@ public class Resource implements Serializable{
 	private static AtomicLong COUNTER = new AtomicLong(0L);
 
 	@Id
-	private Long sys_id;
+	private String sys_id;
 
 	private String id;
 	private String type;
@@ -30,7 +30,7 @@ public class Resource implements Serializable{
 
 	@PersistenceConstructor
 	public Resource() {
-		this.sys_id = COUNTER.incrementAndGet();
+		this.sys_id = String.valueOf(COUNTER.incrementAndGet());
 	}
 
 	public String getId() {

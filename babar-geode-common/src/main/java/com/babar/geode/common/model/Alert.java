@@ -14,7 +14,7 @@ public class Alert implements Serializable{
 	private static AtomicLong COUNTER = new AtomicLong(0L);
 
 	@Id
-	private Long sys_id;
+	private String sys_id;
 
 	private int severity = 1; //告警级别 （ critical，major，minor，warning，normal，unkonwn）
 	private String matchPolicy; // 匹配的预处理策略
@@ -40,7 +40,7 @@ public class Alert implements Serializable{
 
 	@PersistenceConstructor
 	public Alert() {
-		this.sys_id = COUNTER.incrementAndGet();
+		this.sys_id = String.valueOf(COUNTER.incrementAndGet());
 	}
 
 	public String getAlertMsg() {
@@ -113,5 +113,13 @@ public class Alert implements Serializable{
 
 	public void setAlertObj(String alertObj) {
 		this.alertObj = alertObj;
+	}
+
+	public String getAlertKey() {
+		return alertKey;
+	}
+
+	public void setAlertKey(String alertKey) {
+		this.alertKey = alertKey;
 	}
 }
