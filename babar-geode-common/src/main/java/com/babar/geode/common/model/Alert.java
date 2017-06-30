@@ -17,7 +17,9 @@ public class Alert implements Serializable{
 	private String sys_id;
 
 	private int severity = 1; //告警级别 （ critical，major，minor，warning，normal，unkonwn）
-	private String matchPolicy; // 匹配的预处理策略
+	private String matchPolicy; //匹配的预处理策略
+	private long timestamp; //从log文件里extract出来的timestamp
+	private long receiveTime; //收到或采集消息的时间，主要是为了计算系统在正常或高峰时处理一条告警所消耗的时间
 
 	private String alertUID;  //告警唯一标识 （例如alertFamily+alertObj+alertMsg）
 	private String alertFamily; //告警类别  (network,host,application,middleware,db,other)
@@ -33,7 +35,7 @@ public class Alert implements Serializable{
 	private String   alertFirstTime; //告警最早产生时间 （压缩中的第一条的时间）
 	private String   alertLastTime; //告警最近产生时间   （压缩后最近的时间）
 	private String   faultTime;  //设备发生故障时间
-	private String   receiveTime; //收到或采集消息的时间，主要是为了计算系统在正常或高峰时处理一条告警所消耗的时间
+	
 	// faultTime < receiveTime < alertfirstTime 
 	private String alertKey; //提取的标签，例如interface,linkup,linkdown...
 	private String enrichInfo; // 丰富信息
@@ -99,12 +101,20 @@ public class Alert implements Serializable{
 		this.faultTime = faultTime;
 	}
 
-	public String getReceiveTime() {
+	public long getReceiveTime() {
 		return receiveTime;
 	}
 
-	public void setReceiveTime(String receiveTime) {
+	public void setReceiveTime(long receiveTime) {
 		this.receiveTime = receiveTime;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public String getAlertObj() {

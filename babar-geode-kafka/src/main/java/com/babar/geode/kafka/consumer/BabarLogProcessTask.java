@@ -1,6 +1,10 @@
 package com.babar.geode.kafka.consumer;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +39,8 @@ public class BabarLogProcessTask implements Runnable {
 
 	public void run() {
 		ObjectNode node = getJsonObjectNode();
-		if (node.has("message")) {
-			processMessage(node.get("message").textValue());
+		if (node.has("message") && node.has("@timestamp")) {
+			processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
 		}
 	}
 
@@ -50,7 +54,7 @@ public class BabarLogProcessTask implements Runnable {
 		return node;
 	}
 
-	private void processMessage(String message){
+	private void processMessage(String message, String timestamp){
 		for (BabarEventRule rule : babarEventRules) {
 			if (message.matches(rule.getMatchPattern())) {
 				Pattern pattern = Pattern.compile(rule.getMatchPattern());
@@ -72,13 +76,44 @@ public class BabarLogProcessTask implements Runnable {
 								value = value.replace(entry.getKey(), entry.getValue());
 							}
 						}
+						if("timestamp".equals(field.getKey())){
+							setTimestampForAlert(alert, value, rule.getTimestampPattern());
+							continue;
+						}
 						myAccessor.setPropertyValue(field.getKey(), value);
 					}
+					setReceivedTime(alert, timestamp);
 					babarGeodeAlertService.insertAlert(alert);
 					logger.info("Insert alert to database - message: " + message);
 					continue;
 				}
 			}
+		}
+	}
+
+	private void setTimestampForAlert(Alert alert, String timestamp, String pattern){
+		try {
+			SimpleDateFormat dt = new SimpleDateFormat(pattern);
+			Date date = dt.parse(timestamp);
+			if(!pattern.contains("yyyy")){
+				Calendar c = Calendar.getInstance();
+				c.setTime(date);
+				c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+				date = c.getTime();
+			}
+			alert.setTimestamp(date.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setReceivedTime(Alert alert, String time){
+		try {
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			Date date = dt.parse(time);
+			alert.setReceiveTime(date.getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 	}
 }

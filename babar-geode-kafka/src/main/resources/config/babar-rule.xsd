@@ -11,6 +11,7 @@
 				<element name="severity" type="integer"/>
 				<element name="node-name" type="string"/>
 				<element name="rule-type" type="string"/>
+				<element name="timestamp-pattern" type="string"/>
 				<element name="match-pattern" type="string"/>
 				<element name="variables">
 					<complexType>

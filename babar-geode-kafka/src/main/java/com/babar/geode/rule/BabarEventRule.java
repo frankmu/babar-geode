@@ -15,6 +15,7 @@ public class BabarEventRule {
 	private int severity;
 	private String nodeName;
 	private String ruleType;
+	private String timestampPattern;
 	private String matchPattern;
 	private List<String> variables;
 	private List<BabarEventRuleField> fields;
@@ -71,6 +72,15 @@ public class BabarEventRule {
 	@XmlElement(name="rule-type", namespace="http://www.example.org/babar-rule")
 	public void setRuleType(String ruleType) {
 		this.ruleType = ruleType;
+	}
+
+	public String getTimestampPattern() {
+		return timestampPattern;
+	}
+
+	@XmlElement(name="timestamp-pattern", namespace="http://www.example.org/babar-rule")
+	public void setTimestampPattern(String timestampPattern) {
+		this.timestampPattern = timestampPattern;
 	}
 
 	public String getMatchPattern() {
