@@ -98,7 +98,7 @@ public class BabarKafkaConsumerConfig {
 		for(Resource file : files){
 			JAXBContext jaxbContext = JAXBContext.newInstance(BabarEventRule.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			BabarEventRule rule = (BabarEventRule) jaxbUnmarshaller.unmarshal(file.getFile());
+			BabarEventRule rule = (BabarEventRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
 			list.add(rule);
 		}
 		return list;
