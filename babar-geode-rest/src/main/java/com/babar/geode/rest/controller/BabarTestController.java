@@ -13,9 +13,9 @@ public class BabarTestController {
 
 	@PostConstruct
 	public String test() {
-		System.out.println("Get region count: " + String.valueOf(alertRepository.count()));
-		Alert alert = new Alert();
-		System.out.println(String.valueOf(alertRepository.save(alert)));
+//		System.out.println("Get region count: " + String.valueOf(alertRepository.count()));
+//		Alert alert = new Alert();
+//		System.out.println(String.valueOf(alertRepository.save(alert)));
 		return null;
 	}
 
