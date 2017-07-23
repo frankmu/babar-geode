@@ -11,6 +11,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +47,8 @@ public class BabarKafkaConsumerConfig {
 
 	@Value("${rule.files}")
 	private Resource[] files;
+
+	private final Log logger = LogFactory.getLog(BabarKafkaConsumerConfig.class);
 
 	@Bean
 	KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
@@ -99,6 +103,7 @@ public class BabarKafkaConsumerConfig {
 			JAXBContext jaxbContext = JAXBContext.newInstance(BabarEventRule.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			BabarEventRule rule = (BabarEventRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
+			logger.info("Load rule file " + rule.getName());
 			list.add(rule);
 		}
 		return list;
