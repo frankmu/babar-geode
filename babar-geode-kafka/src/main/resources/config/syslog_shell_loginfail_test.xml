@@ -2,25 +2,24 @@
 <rule xmlns="http://www.example.org/babar-rule"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.example.org/babar-rule babar-rule.xsd ">
-	<name>SNMP-3-AUTHFAIL</name>
-	<priority>1</priority>
+	<name>SHELL-4-LOGINFAIL</name>
+	<priority>4</priority>
 	<action>+</action>
-	<severity>1</severity>
+	<severity>2</severity>
 	<node-name>.*</node-name>
-	<rule-type>cisco</rule-type>
+	<rule-type>host</rule-type>
 	<timestamp-pattern>MMM dd HH:mm:ss</timestamp-pattern>
-	<match-pattern>^(\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2})\s([^\s]*)\s[^\s:]*:\s\*(\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2}\.\d{3}):\s([^\s]*)\s%\w*-\d*-\w*:\s(.*)$</match-pattern>
+	<match-pattern>^(\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2})\s\[([^\s]*)]\s+\d{4}\s+\w+\-\w+\-\w+\s+%%10SHELL\/4\/LOGINFAIL\(l\):\-DevIP\=([^\s]*);\s+(.*)$</match-pattern>
 	<variables>
 		<variable>timestamp</variable>
 		<variable>ip</variable>
-		<variable>incident-timestamp</variable>
-		<variable>node-name</variable>
+		<variable>devip</variable>
 		<variable>msgtxt</variable>
 	</variables>
 	<fields>
 		<field key="timestamp">$timestamp</field>
 		<field key="alertMsg">$msgtxt at $timestamp</field>
-		<field key="faultTime">$incident-timestamp</field>
-		<field key="alertObj">$node-name</field>
+		<field key="faultTime">$timestamp</field>
+		<field key="alertObj">$devip</field>
 	</fields>
 </rule>
