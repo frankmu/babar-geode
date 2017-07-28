@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://geode.apache.org/schema/cache" 
+	xsi:schemaLocation="http://geode.apache.org/schema/cache http://geode.apache.org/schema/cache/cache-1.0.xsd" 
+	version="1.0" 
+	lock-lease="120" lock-timeout="60" search-timeout="300" is-server="true" copy-on-read="false">
+
+	<cache-server port="40404"/>
+	
+	<disk-store name="regionstore" compaction-threshold="50"
+		auto-compact="true" allow-force-compaction="false" queue-size="0" time-interval="1000" write-buffer-size="32768">
+		<disk-dirs>
+			<disk-dir>/app/gfdb/diskstore/regionstore</disk-dir>
+		</disk-dirs>
+	</disk-store>
+
+	<disk-store name="pdxstore" compaction-threshold="50"
+		auto-compact="true" allow-force-compaction="false" queue-size="0" time-interval="1000" write-buffer-size="32768">
+		<disk-dirs>
+			<disk-dir>/app/gfdb/diskstore/pdxstore</disk-dir>
+			<!-- <disk-dir dir-size="20000">/diskstore/data/pdxstore</disk-dir> -->
+		</disk-dirs>
+	</disk-store>
+
+
+	<pdx read-serialized="false" persistent="true" disk-store-name="pdxstore">
+		<pdx-serializer>
+			<class-name>
+				com.gemstone.gemfire.pdx.ReflectionBasedAutoSerializer
+			</class-name>
+			<parameter name="classes">
+				<string>com.cviz.geode.common.domain.*</string>
+			</parameter>
+			<parameter name="check-portability">
+				<string>true</string>
+			</parameter>
+		</pdx-serializer>
+	</pdx>
+
+	<region name="alert">
+		<region-attributes refid="REPLICATE_PERSISTENT" statistics-enabled="true"  disk-store-name="regionstore" disk-synchronous="false"/>
+	</region>	
+
+	<resource-manager eviction-heap-percentage="85" critical-heap-percentage="95" />
+
+</cache>
