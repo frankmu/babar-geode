@@ -39,6 +39,7 @@
 
 	<region name="alert">
 		<region-attributes refid="REPLICATE_PERSISTENT" statistics-enabled="true"  disk-store-name="regionstore" disk-synchronous="false"/>
+		<index name="alertTimeIndex" from-clause="/alert" expression="alertTime"/>
 	</region>	
 
 	<resource-manager eviction-heap-percentage="85" critical-heap-percentage="95" />
