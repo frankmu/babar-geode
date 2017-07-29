@@ -17,8 +17,19 @@ public class BabarAlertController {
 	private AlertService alertService;
 
 	@RequestMapping(value = "/alerts", method = RequestMethod.GET)
-	public Iterable<Alert> findAllOrderByTimestampLimit(@RequestParam(value = "limit", defaultValue = "10") String limit) {
-		return alertService.findAllOrderByTimestampLimit(Integer.parseInt(limit));
+	public Iterable<Alert> findAllOrderByTimestampLimit(@RequestParam(value = "limit", defaultValue = "50") String limit) {
+		return alertService.findAllOrderByAlertTimeDescLimit(Integer.parseInt(limit));
+	}
+
+	@RequestMapping(value = "/search/findByAlertTime", method = RequestMethod.GET)
+	public Iterable<Alert> findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(
+			@RequestParam(value = "startTime", required = true) String startTime,
+			@RequestParam(value = "endTime", required = true) String endTime,
+			@RequestParam(value = "limit", defaultValue = "50") String limit) {
+		return alertService.findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(
+				Long.parseLong(startTime),
+				Long.parseLong(endTime),
+				Integer.parseInt(limit));
 	}
 
 	@RequestMapping(value = "/alerts/{id}", method = RequestMethod.DELETE)

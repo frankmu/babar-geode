@@ -26,7 +26,7 @@ public class AlertServiceImpl implements AlertService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Alert> findAllOrderByTimestampLimit(int limit) {
+	public List<Alert> findAllOrderByAlertTimeDescLimit(int limit) {
 		try {
 			// specify the query string
 			String queryString = "<TRACE> SELECT * FROM /alert ORDER BY alertTime DESC LIMIT $1";
@@ -36,6 +36,26 @@ public class AlertServiceImpl implements AlertService{
 			// set query bind parameters
 			Object[] params = new Object[1];
 			params[0] = limit;
+
+	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
+			return result.asList();
+		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException | QueryInvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Alert> findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(Long startTime, Long endTime, int limit) {
+		try {
+			// specify the query string
+			String queryString = "<TRACE> SELECT * FROM /alert WHERE alertTime > $1 AND alertTime < $2 ORDER BY alertTime DESC LIMIT $3";
+			QueryService queryService = cvizClientCache.getQueryService();
+			Query query = queryService.newQuery(queryString);
+
+			// set query bind parameters
+			Object[] params = {startTime, endTime, limit};
 
 	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
 			return result.asList();
