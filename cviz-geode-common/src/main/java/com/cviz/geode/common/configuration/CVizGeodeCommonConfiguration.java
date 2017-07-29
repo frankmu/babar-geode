@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(value="com.cviz.geode.common")
 public class CVizGeodeCommonConfiguration {
 
-	@Bean
+	@Bean(destroyMethod = "close")
 	public ClientCache cvizClientCache() {
 		ClientCache clientCache = new ClientCacheFactory().set("name", "CVizClientCache")
 														  .set("cache-xml-file", "cache-client.xml")

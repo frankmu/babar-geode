@@ -28,9 +28,16 @@ public class AlertServiceImpl implements AlertService{
 	@Override
 	public List<Alert> findAllOrderByTimestampLimit(int limit) {
 		try {
+			// specify the query string
+			String queryString = "<TRACE> SELECT * FROM /alert ORDER BY alertTime DESC LIMIT $1";
 			QueryService queryService = cvizClientCache.getQueryService();
-	        Query query = queryService.newQuery("<trace> select * from /alert order by alertTime desc limit " + limit);
-	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute();
+			Query query = queryService.newQuery(queryString);
+
+			// set query bind parameters
+			Object[] params = new Object[1];
+			params[0] = limit;
+
+	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
 			return result.asList();
 		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException | QueryInvocationTargetException e) {
 			e.printStackTrace();
