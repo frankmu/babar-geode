@@ -1,25 +1,16 @@
-package com.babar.geode.common.model;
+package com.cviz.geode.common.domain;
 
 import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.gemfire.mapping.Region;
-
-@Region("alert")
 public class Alert implements Serializable{
 
 	private static final long serialVersionUID = 6691986158803858615L;
-	private static AtomicLong COUNTER = new AtomicLong(0L);
 
-	@Id
-	private String sys_id;
-
-	private int severity = 1; //告警级别 （ critical，major，minor，warning，normal，unkonwn）
+	private String id;
+	private Integer severity = 1; //告警级别 （ critical，major，minor，warning，normal，unkonwn）
 	private String matchPolicy; //匹配的预处理策略
-	private long timestamp; //从log文件里extract出来的timestamp
-	private long receiveTime; //收到或采集消息的时间，主要是为了计算系统在正常或高峰时处理一条告警所消耗的时间
+	private Long alertTime; //从log文件里extract出来的timestamp
+	private Long receiveTime; //收到或采集消息的时间，主要是为了计算系统在正常或高峰时处理一条告警所消耗的时间
 
 	private String alertUID;  //告警唯一标识 （例如alertFamily+alertObj+alertMsg）
 	private String alertFamily; //告警类别  (network,host,application,middleware,db,other)
@@ -31,7 +22,7 @@ public class Alert implements Serializable{
 	private String alertCondition; //告警条件（个人建议放在配置文件中）
 	private String alertFrom;  //告警来源 （网管主机【agent】的IP或hostname）
 	private String resourceID; //告警资源 （关联资源信息的外键）
-	private int    alertTally; //告警次数
+	private Integer    alertTally; //告警次数
 	private String   alertFirstTime; //告警最早产生时间 （压缩中的第一条的时间）
 	private String   alertLastTime; //告警最近产生时间   （压缩后最近的时间）
 	private String   faultTime;  //设备发生故障时间
@@ -40,9 +31,12 @@ public class Alert implements Serializable{
 	private String alertKey; //提取的标签，例如interface,linkup,linkdown...
 	private String enrichInfo; // 丰富信息
 
-	@PersistenceConstructor
-	public Alert() {
-		this.sys_id = String.valueOf(COUNTER.incrementAndGet());
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getAlertMsg() {
@@ -53,7 +47,7 @@ public class Alert implements Serializable{
 		this.alertMsg = alertMsg;
 	}
 
-	public int getSeverity() {
+	public Integer getSeverity() {
 		return severity;
 	}
 
@@ -101,7 +95,7 @@ public class Alert implements Serializable{
 		this.faultTime = faultTime;
 	}
 
-	public long getReceiveTime() {
+	public Long getReceiveTime() {
 		return receiveTime;
 	}
 
@@ -109,12 +103,12 @@ public class Alert implements Serializable{
 		this.receiveTime = receiveTime;
 	}
 
-	public long getTimestamp() {
-		return timestamp;
+	public Long getAlertTime() {
+		return alertTime;
 	}
 
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+	public void setAlertTime(long alertTime) {
+		this.alertTime = alertTime;
 	}
 
 	public String getAlertObj() {

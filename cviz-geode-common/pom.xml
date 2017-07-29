@@ -8,21 +8,19 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../babar-geode-parent/pom.xml</relativePath>
 	</parent>
-	<artifactId>babar-geode-common</artifactId>
+	<artifactId>cviz-geode-common</artifactId>
 	<packaging>jar</packaging>
-
-	<properties>
-		<exec-maven-plugin.version>1.5.0</exec-maven-plugin.version>
-		<spring-data-geode.version>1.0.0.INCUBATING-RELEASE</spring-data-geode.version>
-		<spring-shell.version>1.1.0.RELEASE</spring-shell.version>
-		<spring-data-gemfire.version>1.9.3.RELEASE</spring-data-gemfire.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-gemfire</artifactId>
-			<version>${springboot.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geode</groupId>
+			<artifactId>geode-core</artifactId>
+			<version>${geode.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -13,11 +13,8 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.babar.geode.common.repository.AlertRepository;
-import com.babar.geode.kafka.service.BabarGeodeAlertService;
 import com.babar.geode.rule.BabarEventRule;
 import com.babar.geode.rule.BabarEventRuleField;
-import com.babar.geode.common.model.Alert;
 
 @Controller
 public class BabarTestController {
@@ -57,11 +54,5 @@ public class BabarTestController {
 	}
 
 	@Autowired
-	private AlertRepository alertRepository;
-
-	@Autowired
 	private List<BabarEventRule> babarEventRules;
-
-	@Autowired
-	private BabarGeodeAlertService babarGeodeAlertService;
 }

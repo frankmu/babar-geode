@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,8 +18,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 
-import com.babar.geode.kafka.service.BabarGeodeAlertService;
-import com.babar.geode.common.model.Alert;
+import com.cviz.geode.common.api.AlertService;
+import com.cviz.geode.common.domain.Alert;
 import com.babar.geode.rule.BabarEventRule;
 import com.babar.geode.rule.BabarEventRuleField;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,14 +28,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class BabarLogProcessTask implements Runnable {
 	private String message;
 	private List<BabarEventRule> babarEventRules;
-	private BabarGeodeAlertService babarGeodeAlertService;
+	private AlertService alertService;
 	private final Log logger = LogFactory.getLog(BabarLogProcessTask.class);
+	private static AtomicLong COUNTER = new AtomicLong(0L);
 
-	public BabarLogProcessTask(ConsumerRecord<String, String> record, List<BabarEventRule> babarEventRules,
-			BabarGeodeAlertService babarAlertService) {
+	public BabarLogProcessTask(ConsumerRecord<String, String> record, List<BabarEventRule> babarEventRules, AlertService alertService) {
 		this.message = record.value();
 		this.babarEventRules = babarEventRules;
-		this.babarGeodeAlertService = babarAlertService;
+		this.alertService = alertService;
 	}
 
 	public void run() {
@@ -65,6 +66,7 @@ public class BabarLogProcessTask implements Runnable {
 						variableMap.put("$" + rule.getVairalbes().get(i), matcher.group(i + 1));
 					}
 					Alert alert = new Alert();
+					alert.setId(String.valueOf(COUNTER.incrementAndGet()));
 					alert.setSeverity(rule.getSeverity());
 					alert.setSourceMsg(message);
 					alert.setMatchPolicy(rule.getName());
@@ -83,7 +85,7 @@ public class BabarLogProcessTask implements Runnable {
 						myAccessor.setPropertyValue(field.getKey(), value);
 					}
 					setReceivedTime(alert, timestamp);
-					babarGeodeAlertService.insertAlert(alert);
+					alertService.save(alert.getId(), alert);
 					logger.info("Insert alert to database - message: " + message);
 					continue;
 				}
@@ -101,7 +103,7 @@ public class BabarLogProcessTask implements Runnable {
 				c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
 				date = c.getTime();
 			}
-			alert.setTimestamp(date.getTime());
+			alert.setAlertTime(date.getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

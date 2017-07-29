@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.babar.geode.kafka.service.BabarGeodeAlertService;
 import com.babar.geode.rule.BabarEventRule;
+import com.cviz.geode.common.api.AlertService;
 
 public class BabarKafkaConsumerListener {
 
@@ -19,10 +19,10 @@ public class BabarKafkaConsumerListener {
 	private List<BabarEventRule> babarEventRules;
 
 	@Autowired
-	private BabarGeodeAlertService babarGeodeAlertService;
+	private AlertService alertService;
 
 	@KafkaListener(topics = "${kafka.topic.name}", containerFactory = "kafkaListenerContainerFactory")
 	public void listenPartition0(ConsumerRecord<String, String> record) {
-		babarWorkerExecutor.execute(new BabarLogProcessTask(record, babarEventRules, babarGeodeAlertService));
+		babarWorkerExecutor.execute(new BabarLogProcessTask(record, babarEventRules, alertService));
 	}
 }
