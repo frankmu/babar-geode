@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/cviz-rule"
+	elementFormDefault="qualified">
+	<element name="rule">
+	    <complexType>
+	    	<all>
+				<element name="name" type="string"/>
+				<element name="priority" type="integer"/>
+				<element name="action" type="string"/>
+				<element name="severity" type="integer"/>
+				<element name="node-name" type="string"/>
+				<element name="rule-type" type="string"/>
+				<element name="timestamp-pattern" type="string"/>
+				<element name="match-pattern" type="string"/>
+				<element name="variables">
+					<complexType>
+				 		<sequence>
+				   			<element name="variable" type="string" maxOccurs="100"/>
+				  		</sequence>
+					</complexType>
+				</element>
+				<element name="fields">
+					<complexType>
+				 		<sequence>
+				 			<element name="field" maxOccurs="100">
+				            	<complexType>
+							    	<simpleContent>
+							    		<extension base="string">
+							          		<attribute name="key" type="string" use="required"/>
+							        	</extension>
+							      	</simpleContent>
+							    </complexType>
+				            </element>
+				  		</sequence>
+					</complexType>
+				</element>
+	      	</all>
+	    </complexType>
+	</element>
+</schema>

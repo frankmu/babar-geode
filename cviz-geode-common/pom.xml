@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>babar-geode</groupId>
-		<artifactId>babar-geode-parent</artifactId>
+		<groupId>cviz-geode</groupId>
+		<artifactId>cviz-geode-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../babar-geode-parent/pom.xml</relativePath>
+		<relativePath>../cviz-geode-parent/pom.xml</relativePath>
 	</parent>
 	<artifactId>cviz-geode-common</artifactId>
 	<packaging>jar</packaging>
