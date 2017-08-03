@@ -77,7 +77,7 @@ public class CVizKafkaConsumerConfig {
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "cviz-" + UUID.randomUUID().toString());
+		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "cviz-demo");
 		// automatically reset the offset to the earliest offset
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 		return properties;
