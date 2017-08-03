@@ -67,10 +67,10 @@
 						</goals>
 						<configuration>
 							<encoding>UTF-8</encoding>
-							<outputDirectory>${project.build.directory}/rules</outputDirectory>
+							<outputDirectory>${project.build.directory}</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/resources/config/rules/</directory>
+									<directory>src/main/resources/</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>

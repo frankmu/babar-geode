@@ -97,7 +97,7 @@ public class CVizKafkaConsumerConfig {
 
 	@Bean
 	List<CVizEventRule> cvizEventRules() throws IOException, JAXBException {
-		Assert.notEmpty(files, "No rule files found!");
+		Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
 		List<CVizEventRule> list = new ArrayList<CVizEventRule>();
 		for(Resource file : files){
 			JAXBContext jaxbContext = JAXBContext.newInstance(CVizEventRule.class);
