@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -42,6 +41,12 @@ public class CVizKafkaConsumerConfig {
 	@Value("${kafka.consumer.task.executor.core.pool.size}")
 	private int kafkaConsumerTaskExecutorCorePoolSize;
 
+	@Value("${kafka.consumer.group.name}")
+	private String kafkaConsumerGroupName;
+
+	@Value("${kafka.consumer.batch.size}")
+	private String kafkaConsumerbatchSize;
+
 	@Value("${worker.executor.core.pool.size}")
 	private int workerExecutorCorePoolSize;
 
@@ -55,6 +60,7 @@ public class CVizKafkaConsumerConfig {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 		factory.setConcurrency(topicPartionCount);
+		factory.setBatchListener(true);
 		factory.getContainerProperties().setConsumerTaskExecutor(consumerTaskExecutor());
 		return factory;
 	}
@@ -77,9 +83,10 @@ public class CVizKafkaConsumerConfig {
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "cviz-demo");
+		properties.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConsumerGroupName);
 		// automatically reset the offset to the earliest offset
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+		properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, kafkaConsumerbatchSize);
 		return properties;
 	}
 

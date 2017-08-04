@@ -22,7 +22,8 @@ public class CVizKafkaConsumerListener {
 	private AlertService alertService;
 
 	@KafkaListener(topics = "${kafka.topic.name}", containerFactory = "kafkaListenerContainerFactory")
-	public void listenPartition0(ConsumerRecord<String, String> record) {
-		cvizWorkerExecutor.execute(new CVizLogProcessTask(record, cvizEventRules, alertService));
+	public void listenPartition0(List<ConsumerRecord<String, String>> records) {
+		cvizWorkerExecutor.submit(new CVizLogProcessTask(records, cvizEventRules, alertService));
 	}
+
 }

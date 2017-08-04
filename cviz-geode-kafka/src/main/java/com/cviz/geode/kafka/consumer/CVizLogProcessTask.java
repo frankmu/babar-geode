@@ -26,26 +26,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CVizLogProcessTask implements Runnable {
-	private String message;
+	private List<ConsumerRecord<String, String>> records;
 	private List<CVizEventRule> cvizEventRules;
 	private AlertService alertService;
 	private final Log logger = LogFactory.getLog(CVizLogProcessTask.class);
 	private static AtomicLong COUNTER = new AtomicLong(0L);
 
-	public CVizLogProcessTask(ConsumerRecord<String, String> record, List<CVizEventRule> cvizEventRules, AlertService alertService) {
-		this.message = record.value();
+	public CVizLogProcessTask(List<ConsumerRecord<String, String>> records, List<CVizEventRule> cvizEventRules, AlertService alertService) {
+		this.records = records;
 		this.cvizEventRules = cvizEventRules;
 		this.alertService = alertService;
 	}
 
 	public void run() {
-		ObjectNode node = getJsonObjectNode();
-		if (node.has("message") && node.has("@timestamp")) {
-			processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
+		for(ConsumerRecord<String, String> record : this.records){
+			ObjectNode node = getJsonObjectNode(record.value());
+			if (node.has("message") && node.has("@timestamp")) {
+				processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
+			}
 		}
 	}
 
-	private ObjectNode getJsonObjectNode() {
+	private ObjectNode getJsonObjectNode(String message) {
 		ObjectNode node = null;
 		try {
 			node = new ObjectMapper().readValue(message, ObjectNode.class);
