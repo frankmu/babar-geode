@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +69,7 @@ public class CVizLogProcessTask implements Runnable {
 						variableMap.put("$" + rule.getVairalbes().get(i), matcher.group(i + 1));
 					}
 					Alert alert = new Alert();
-					alert.setId(String.valueOf(COUNTER.incrementAndGet()));
+					alert.setId(UUID.randomUUID().toString());
 					alert.setSeverity(rule.getSeverity());
 					alert.setSourceMsg(message);
 					alert.setMatchPolicy(rule.getName());
