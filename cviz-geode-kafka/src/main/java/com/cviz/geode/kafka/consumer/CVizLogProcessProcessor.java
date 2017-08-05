@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,20 +25,19 @@ import com.cviz.geode.rule.CVizEventRuleField;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class CVizLogProcessTask implements Runnable {
+public class CVizLogProcessProcessor {
 	private List<ConsumerRecord<String, String>> records;
 	private List<CVizEventRule> cvizEventRules;
 	private AlertService alertService;
-	private final Log logger = LogFactory.getLog(CVizLogProcessTask.class);
-	private static AtomicLong COUNTER = new AtomicLong(0L);
+	private final Log logger = LogFactory.getLog(CVizLogProcessProcessor.class);
 
-	public CVizLogProcessTask(List<ConsumerRecord<String, String>> records, List<CVizEventRule> cvizEventRules, AlertService alertService) {
+	public CVizLogProcessProcessor(List<ConsumerRecord<String, String>> records, List<CVizEventRule> cvizEventRules, AlertService alertService) {
 		this.records = records;
 		this.cvizEventRules = cvizEventRules;
 		this.alertService = alertService;
 	}
 
-	public void run() {
+	public void process() {
 		for(ConsumerRecord<String, String> record : this.records){
 			ObjectNode node = getJsonObjectNode(record.value());
 			if (node.has("message") && node.has("@timestamp")) {

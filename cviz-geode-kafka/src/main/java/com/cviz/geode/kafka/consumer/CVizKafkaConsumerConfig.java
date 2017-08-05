@@ -24,6 +24,7 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMode;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
@@ -35,20 +36,14 @@ public class CVizKafkaConsumerConfig {
 	@Value("${kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
-	@Value("${kafka.topic.partition.count}")
-	private int topicPartionCount;
-
-	@Value("${kafka.consumer.task.executor.core.pool.size}")
-	private int kafkaConsumerTaskExecutorCorePoolSize;
+	@Value("${kafka.consumer.number}")
+	private int kafkaConsumerNumber;
 
 	@Value("${kafka.consumer.group.name}")
 	private String kafkaConsumerGroupName;
 
 	@Value("${kafka.consumer.batch.size}")
 	private String kafkaConsumerbatchSize;
-
-	@Value("${worker.executor.core.pool.size}")
-	private int workerExecutorCorePoolSize;
 
 	@Value("${rule.files}")
 	private Resource[] files;
@@ -59,9 +54,10 @@ public class CVizKafkaConsumerConfig {
 	KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
-		factory.setConcurrency(topicPartionCount);
+		factory.setConcurrency(kafkaConsumerNumber);
 		factory.setBatchListener(true);
 		factory.getContainerProperties().setConsumerTaskExecutor(consumerTaskExecutor());
+		factory.getContainerProperties().setAckMode(AckMode.MANUAL);
 		return factory;
 	}
 
@@ -73,7 +69,7 @@ public class CVizKafkaConsumerConfig {
 	@Bean
 	public AsyncListenableTaskExecutor consumerTaskExecutor() {
 		ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
-		tpte.setCorePoolSize(kafkaConsumerTaskExecutorCorePoolSize);
+		tpte.setCorePoolSize(kafkaConsumerNumber);
 		return tpte;
 	}
 
@@ -87,19 +83,13 @@ public class CVizKafkaConsumerConfig {
 		// automatically reset the offset to the earliest offset
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 		properties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, kafkaConsumerbatchSize);
+		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
 		return properties;
 	}
 
 	@Bean
 	public CVizKafkaConsumerListener handler() {
 		return new CVizKafkaConsumerListener();
-	}
-
-	@Bean
-	ThreadPoolTaskExecutor cvizWorkerExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(workerExecutorCorePoolSize);
-		return executor;
 	}
 
 	@Bean
