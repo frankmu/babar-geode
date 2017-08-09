@@ -6,9 +6,9 @@ import com.cviz.geode.common.domain.Alert;
 
 public interface AlertService {
 
-	List<Alert> findAllOrderByAlertTimeDescLimit(int limit);
+	List<Alert> findAllOrderByReceiveTimeDescLimit(int limit);
 
-	List<Alert> findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(Long startTime, Long endTime, int limit);
+	List<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(Long startTime, Long endTime, int limit);
 
 	Alert save(String id, Alert alert);
 

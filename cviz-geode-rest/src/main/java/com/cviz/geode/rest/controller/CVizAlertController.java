@@ -20,16 +20,16 @@ public class CVizAlertController {
 	@CrossOrigin
 	@RequestMapping(value = "/alerts", method = RequestMethod.GET)
 	public Iterable<Alert> findAllOrderByTimestampLimit(@RequestParam(value = "limit", defaultValue = "50") String limit) {
-		return alertService.findAllOrderByAlertTimeDescLimit(Integer.parseInt(limit));
+		return alertService.findAllOrderByReceiveTimeDescLimit(Integer.parseInt(limit));
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/search/findByAlertTime", method = RequestMethod.GET)
-	public Iterable<Alert> findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(
+	@RequestMapping(value = "/search/findByReceiveTime", method = RequestMethod.GET)
+	public Iterable<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,
 			@RequestParam(value = "limit", defaultValue = "50") String limit) {
-		return alertService.findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(
+		return alertService.findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(
 				Long.parseLong(startTime),
 				Long.parseLong(endTime),
 				Integer.parseInt(limit));

@@ -26,10 +26,10 @@ public class AlertServiceImpl implements AlertService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Alert> findAllOrderByAlertTimeDescLimit(int limit) {
+	public List<Alert> findAllOrderByReceiveTimeDescLimit(int limit) {
 		try {
 			// specify the query string
-			String queryString = "<TRACE> SELECT * FROM /alert ORDER BY alertTime DESC LIMIT $1";
+			String queryString = "<TRACE> SELECT * FROM /alert ORDER BY receiveTime DESC LIMIT $1";
 			QueryService queryService = cvizClientCache.getQueryService();
 			Query query = queryService.newQuery(queryString);
 
@@ -47,10 +47,10 @@ public class AlertServiceImpl implements AlertService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Alert> findByAlertTimeGreaterThanAndAlertTimeLessThanOrderByAlertTimeDescLimit(Long startTime, Long endTime, int limit) {
+	public List<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(Long startTime, Long endTime, int limit) {
 		try {
 			// specify the query string
-			String queryString = "<TRACE> SELECT * FROM /alert WHERE alertTime > $1 AND alertTime < $2 ORDER BY alertTime DESC LIMIT $3";
+			String queryString = "<TRACE> SELECT * FROM /alert WHERE receiveTime > $1 AND receiveTime < $2 ORDER BY receiveTime DESC LIMIT $3";
 			QueryService queryService = cvizClientCache.getQueryService();
 			Query query = queryService.newQuery(queryString);
 
