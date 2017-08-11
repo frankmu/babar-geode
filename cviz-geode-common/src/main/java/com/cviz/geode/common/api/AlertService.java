@@ -12,5 +12,7 @@ public interface AlertService {
 
 	Alert save(String id, Alert alert);
 
+	boolean saveAll(List<Alert> alerts);
+
 	Alert remove(String id);
 }

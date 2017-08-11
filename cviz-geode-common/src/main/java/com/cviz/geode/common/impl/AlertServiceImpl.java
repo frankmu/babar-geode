@@ -3,6 +3,9 @@ package com.cviz.geode.common.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.geode.cache.CacheTransactionManager;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.query.FunctionDomainException;
@@ -19,10 +22,12 @@ import com.cviz.geode.common.api.AlertService;
 import com.cviz.geode.common.domain.Alert;
 
 @Service
-public class AlertServiceImpl implements AlertService{
+public class AlertServiceImpl implements AlertService {
 
 	@Autowired
 	private ClientCache cvizClientCache;
+
+	private final Log logger = LogFactory.getLog(AlertServiceImpl.class);
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -37,9 +42,10 @@ public class AlertServiceImpl implements AlertService{
 			Object[] params = new Object[1];
 			params[0] = limit;
 
-	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
+			SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
 			return result.asList();
-		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException | QueryInvocationTargetException e) {
+		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
+				| QueryInvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return Collections.emptyList();
@@ -47,7 +53,8 @@ public class AlertServiceImpl implements AlertService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(Long startTime, Long endTime, int limit) {
+	public List<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(Long startTime,
+			Long endTime, int limit) {
 		try {
 			// specify the query string
 			String queryString = "<TRACE> SELECT * FROM /alert WHERE receiveTime > $1 AND receiveTime < $2 ORDER BY receiveTime DESC LIMIT $3";
@@ -55,11 +62,12 @@ public class AlertServiceImpl implements AlertService{
 			Query query = queryService.newQuery(queryString);
 
 			// set query bind parameters
-			Object[] params = {startTime, endTime, limit};
+			Object[] params = { startTime, endTime, limit };
 
-	        SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
+			SelectResults<Alert> result = (SelectResults<Alert>) query.execute(params);
 			return result.asList();
-		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException | QueryInvocationTargetException e) {
+		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
+				| QueryInvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return Collections.emptyList();
@@ -70,6 +78,24 @@ public class AlertServiceImpl implements AlertService{
 		Region<String, Alert> region = cvizClientCache.getRegion("alert");
 		region.put(id, alert);
 		return alert;
+	}
+
+	@Override
+	public boolean saveAll(List<Alert> alerts) {
+		CacheTransactionManager txManager = cvizClientCache.getCacheTransactionManager();
+		Region<String, Alert> region = cvizClientCache.getRegion("alert");
+		try {
+			txManager.begin();
+			for (Alert alert : alerts) {
+				region.put(alert.getId(), alert);
+			}
+			txManager.commit();
+			return true;
+		} catch (Exception e) {
+			txManager.rollback();
+			logger.error(e.getStackTrace());
+		}
+		return false;
 	}
 
 	@Override

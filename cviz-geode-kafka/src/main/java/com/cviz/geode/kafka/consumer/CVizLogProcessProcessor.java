@@ -3,6 +3,7 @@ package com.cviz.geode.kafka.consumer;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,12 +30,14 @@ public class CVizLogProcessProcessor {
 	private List<ConsumerRecord<String, String>> records;
 	private List<CVizEventRule> cvizEventRules;
 	private AlertService alertService;
+	private List<Alert> newAlerts;
 	private final Log logger = LogFactory.getLog(CVizLogProcessProcessor.class);
 
 	public CVizLogProcessProcessor(List<ConsumerRecord<String, String>> records, List<CVizEventRule> cvizEventRules, AlertService alertService) {
 		this.records = records;
 		this.cvizEventRules = cvizEventRules;
 		this.alertService = alertService;
+		this.newAlerts = new ArrayList<Alert>();
 	}
 
 	public void process() {
@@ -42,6 +45,11 @@ public class CVizLogProcessProcessor {
 			ObjectNode node = getJsonObjectNode(record.value());
 			if (node.has("message") && node.has("@timestamp")) {
 				processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
+			}
+		}
+		if(alertService.saveAll(this.newAlerts)) {
+			for(Alert alert : this.newAlerts) {
+				logger.info("Insert alert to database - message: " + alert.getSourceMsg());
 			}
 		}
 	}
@@ -86,8 +94,7 @@ public class CVizLogProcessProcessor {
 						myAccessor.setPropertyValue(field.getKey(), value);
 					}
 					setReceivedTime(alert, timestamp);
-					alertService.save(alert.getId(), alert);
-					logger.info("Insert alert to database - message: " + message);
+					newAlerts.add(alert);
 					continue;
 				}
 			}
