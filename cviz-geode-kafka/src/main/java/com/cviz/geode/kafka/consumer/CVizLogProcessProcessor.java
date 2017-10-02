@@ -75,10 +75,10 @@ public class CVizLogProcessProcessor {
 						variableMap.put("$" + rule.getVairalbes().get(i), matcher.group(i + 1));
 					}
 					Alert alert = new Alert();
-					alert.setId(UUID.randomUUID().toString());
+					alert.setAlertUID(UUID.randomUUID().toString());
 					alert.setSeverity(rule.getSeverity());
 					alert.setSourceMsg(message);
-					alert.setMatchPolicy(rule.getName());
+					alert.setMatchPrePolicy(rule.getName());
 					PropertyAccessor myAccessor = PropertyAccessorFactory.forBeanPropertyAccess(alert);
 					for (CVizEventRuleField field : rule.getFields()) {
 						String value = field.getValue();
@@ -111,7 +111,7 @@ public class CVizLogProcessProcessor {
 				c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
 				date = c.getTime();
 			}
-			alert.setAlertTime(date.getTime());
+			alert.setFaultTime(date.getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

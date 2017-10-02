@@ -87,7 +87,7 @@ public class AlertServiceImpl implements AlertService {
 		try {
 			txManager.begin();
 			for (Alert alert : alerts) {
-				region.put(alert.getId(), alert);
+				region.put(alert.getAlertUID(), alert);
 			}
 			txManager.commit();
 			return true;
