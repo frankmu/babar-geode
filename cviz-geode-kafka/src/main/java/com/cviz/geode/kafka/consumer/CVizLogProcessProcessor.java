@@ -21,19 +21,19 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import com.cviz.geode.common.api.AlertService;
 import com.cviz.geode.common.domain.Alert;
-import com.cviz.geode.rule.CVizEventRule;
+import com.cviz.geode.rule.CVizSyslogEventXMLRule;
 import com.cviz.geode.rule.CVizEventRuleField;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CVizLogProcessProcessor {
 	private List<ConsumerRecord<String, String>> records;
-	private List<CVizEventRule> cvizEventRules;
+	private List<CVizSyslogEventXMLRule> cvizEventRules;
 	private AlertService alertService;
 	private List<Alert> newAlerts;
 	private final Log logger = LogFactory.getLog(CVizLogProcessProcessor.class);
 
-	public CVizLogProcessProcessor(List<ConsumerRecord<String, String>> records, List<CVizEventRule> cvizEventRules, AlertService alertService) {
+	public CVizLogProcessProcessor(List<ConsumerRecord<String, String>> records, List<CVizSyslogEventXMLRule> cvizEventRules, AlertService alertService) {
 		this.records = records;
 		this.cvizEventRules = cvizEventRules;
 		this.alertService = alertService;
@@ -65,22 +65,22 @@ public class CVizLogProcessProcessor {
 	}
 
 	private void processMessage(String message, String timestamp){
-		for (CVizEventRule rule : cvizEventRules) {
-			if (message.matches(rule.getMatchPattern())) {
-				Pattern pattern = Pattern.compile(rule.getMatchPattern());
+		for (CVizSyslogEventXMLRule rule : cvizEventRules) {
+			if (message.matches(rule.getSyslogMatchPattern())) {
+				Pattern pattern = Pattern.compile(rule.getSyslogMatchPattern());
 				Matcher matcher = pattern.matcher(message);
 				if (matcher.matches()) {
 					Map<String, String> variableMap = new HashMap<String, String>();
-					for (int i = 0; i < rule.getVairalbes().size(); i++) {
-						variableMap.put("$" + rule.getVairalbes().get(i), matcher.group(i + 1));
+					for (int i = 0; i < rule.getRuleVariables().size(); i++) {
+						variableMap.put("$" + rule.getRuleVariables().get(i).getValue(), matcher.group(i + 1));
 					}
 					Alert alert = new Alert();
 					alert.setAlertUID(UUID.randomUUID().toString());
-					alert.setSeverity(rule.getSeverity());
+					alert.setSeverity(rule.getAlertSeverity());
 					alert.setSourceMsg(message);
-					alert.setMatchPrePolicy(rule.getName());
+					alert.setMatchPrePolicy(rule.getRuleName());
 					PropertyAccessor myAccessor = PropertyAccessorFactory.forBeanPropertyAccess(alert);
-					for (CVizEventRuleField field : rule.getFields()) {
+					for (CVizEventRuleField field : rule.getRuleFields()) {
 						String value = field.getValue();
 						for (Map.Entry<String, String> entry : variableMap.entrySet()) {
 							if (value.contains(entry.getKey())) {
@@ -88,7 +88,7 @@ public class CVizLogProcessProcessor {
 							}
 						}
 						if("timestamp".equals(field.getKey())){
-							setTimestampForAlert(alert, value, rule.getTimestampPattern());
+							setTimestampForAlert(alert, value, rule.getReceiveTimePattern());
 							continue;
 						}
 						myAccessor.setPropertyValue(field.getKey(), value);

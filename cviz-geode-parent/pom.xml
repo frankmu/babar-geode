@@ -16,6 +16,7 @@
 		<spring-kafka.version>1.2.1.RELEASE</spring-kafka.version>
 		<spring.version>4.3.10.RELEASE</spring.version>
 		<geode.version>1.2.0</geode.version>
+		<org.json.version>20170516</org.json.version>
 	</properties>
 	<modules>
 		<module>../cviz-geode-common</module>

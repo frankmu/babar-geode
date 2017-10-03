@@ -11,10 +11,10 @@
 	<timestamp-pattern>MMM dd HH:mm:ss</timestamp-pattern>
 	<match-pattern>^(\w{3}\s+\d{1,2}\s\d{2}:\d{2}:\d{2})\s\[([^\s]*)]\s+\d{4}\s+\w+\-\w+\-\w+\s+%%10SHELL\/4\/LOGINFAIL\(l\):\-DevIP\=([^\s]*);\s+(.*)$</match-pattern>
 	<variables>
-		<variable>timestamp</variable>
-		<variable>ip</variable>
-		<variable>devip</variable>
-		<variable>msgtxt</variable>
+		<variable index="0">timestamp</variable>
+		<variable index="1">ip</variable>
+		<variable index="2">devip</variable>
+		<variable index="3">msgtxt</variable>
 	</variables>
 	<fields>
 		<field key="timestamp">$timestamp</field>

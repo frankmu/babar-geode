@@ -38,6 +38,11 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 			<version>${springboot.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>${org.json.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

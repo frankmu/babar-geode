@@ -8,12 +8,12 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 
 import com.cviz.geode.common.api.AlertService;
-import com.cviz.geode.rule.CVizEventRule;
+import com.cviz.geode.rule.CVizSyslogEventXMLRule;
 
 public class CVizKafkaConsumerListener {
 
 	@Autowired
-	private List<CVizEventRule> cvizEventRules;
+	private List<CVizSyslogEventXMLRule> cvizEventRules;
 
 	@Autowired
 	private AlertService alertService;

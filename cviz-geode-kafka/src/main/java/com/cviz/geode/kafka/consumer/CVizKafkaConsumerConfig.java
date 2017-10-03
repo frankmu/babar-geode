@@ -28,7 +28,7 @@ import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMo
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
-import com.cviz.geode.rule.CVizEventRule;
+import com.cviz.geode.rule.CVizSyslogEventXMLRule;
 
 @Configuration
 public class CVizKafkaConsumerConfig {
@@ -93,14 +93,14 @@ public class CVizKafkaConsumerConfig {
 	}
 
 	@Bean
-	List<CVizEventRule> cvizEventRules() throws IOException, JAXBException {
+	List<CVizSyslogEventXMLRule> cvizEventRules() throws IOException, JAXBException {
 		Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
-		List<CVizEventRule> list = new ArrayList<CVizEventRule>();
+		List<CVizSyslogEventXMLRule> list = new ArrayList<CVizSyslogEventXMLRule>();
 		for(Resource file : files){
-			JAXBContext jaxbContext = JAXBContext.newInstance(CVizEventRule.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(CVizSyslogEventXMLRule.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			CVizEventRule rule = (CVizEventRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
-			logger.info("Load rule file " + rule.getName());
+			CVizSyslogEventXMLRule rule = (CVizSyslogEventXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
+			logger.info("Load rule file " + rule.getRuleName());
 			list.add(rule);
 		}
 		return list;
