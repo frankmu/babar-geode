@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="rule", namespace="http://www.example.org/cviz-rule")
-public class CVizSyslogEventXMLRule extends CVizSyslogEventRule {
+public class CVizTrapEventXMLRule extends CVizTrapEventRule {
 
 	@Override
 	@XmlElement(namespace="http://www.example.org/cviz-rule")
@@ -61,13 +61,13 @@ public class CVizSyslogEventXMLRule extends CVizSyslogEventRule {
 
 	@Override
 	@XmlElement(name="match-pattern", namespace="http://www.example.org/cviz-rule")
-	public void setSyslogMatchPattern(String syslogMatchPattern) {
-		this.syslogMatchPattern = syslogMatchPattern;
+	public void setTrapSeparator(String trapSeparator) {
+		this.trapSeparator = trapSeparator;
 	}
 
 	@Override
 	@XmlElement(name="node-name", namespace="http://www.example.org/cviz-rule")
-	public void setNodeName(String syslogMatchNode) {
-		this.syslogMatchNode = syslogMatchNode;
+	public void setTrapConditions(String trapConditions) {
+		this.trapConditions = trapConditions;
 	}
 }

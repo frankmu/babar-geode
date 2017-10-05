@@ -16,6 +16,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
@@ -28,7 +29,13 @@ import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMo
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
+import com.cviz.geode.rule.CVizEventType;
+import com.cviz.geode.rule.CVizSyslogEventRule;
+import com.cviz.geode.rule.CVizSyslogEventRuleCondition;
 import com.cviz.geode.rule.CVizSyslogEventXMLRule;
+import com.cviz.geode.rule.CVizTrapEventRule;
+import com.cviz.geode.rule.CVizTrapEventRuleCondition;
+import com.cviz.geode.rule.CVizTrapEventXMLRule;
 
 @Configuration
 public class CVizKafkaConsumerConfig {
@@ -47,6 +54,12 @@ public class CVizKafkaConsumerConfig {
 
 	@Value("${rule.files}")
 	private Resource[] files;
+
+	@Value("${rule.type}")
+	private String ruleType;
+
+	@Value("${rule.source}")
+	private String ruleSource;
 
 	private final Log logger = LogFactory.getLog(CVizKafkaConsumerConfig.class);
 
@@ -89,19 +102,49 @@ public class CVizKafkaConsumerConfig {
 
 	@Bean
 	public CVizKafkaConsumerListener handler() {
-		return new CVizKafkaConsumerListener();
+		if(ruleType.equalsIgnoreCase(CVizEventType.SYSLOG.toString())) {
+			return new CVizKafkaConsumerSyslogListener();
+		}else if(ruleType.equalsIgnoreCase(CVizEventType.TRAP.toString())) {
+			return new CVizKafkaConsumerTrapListener();
+		}else {
+			return null;
+		}
 	}
 
-	@Bean
-	List<CVizSyslogEventXMLRule> cvizEventRules() throws IOException, JAXBException {
-		Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
-		List<CVizSyslogEventXMLRule> list = new ArrayList<CVizSyslogEventXMLRule>();
-		for(Resource file : files){
-			JAXBContext jaxbContext = JAXBContext.newInstance(CVizSyslogEventXMLRule.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			CVizSyslogEventXMLRule rule = (CVizSyslogEventXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
-			logger.info("Load rule file " + rule.getRuleName());
-			list.add(rule);
+	@Bean(name = "cvizEventRules")
+	@Conditional(CVizSyslogEventRuleCondition.class)
+	public List<CVizSyslogEventRule> getCVizSyslogEventRule() throws IOException, JAXBException{
+		List<CVizSyslogEventRule> list = new ArrayList<CVizSyslogEventRule>();
+		if(ruleType.equalsIgnoreCase("file")) {
+			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
+			for(Resource file : files){
+				JAXBContext jaxbContext = JAXBContext.newInstance(CVizSyslogEventXMLRule.class);
+				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				CVizSyslogEventXMLRule rule = (CVizSyslogEventXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
+				logger.info("Load rule file " + rule.getRuleName());
+				list.add(rule);
+			}
+		}else if(ruleType.equalsIgnoreCase("database")) {
+		}else {
+		}
+		return list;
+	}
+
+	@Bean(name = "cvizEventRules")
+	@Conditional(CVizTrapEventRuleCondition.class)
+	public List<CVizTrapEventRule> getCVizTrapEventRule() throws IOException, JAXBException{
+		List<CVizTrapEventRule> list = new ArrayList<CVizTrapEventRule>();
+		if(ruleType.equalsIgnoreCase("file")) {
+			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
+			for(Resource file : files){
+				JAXBContext jaxbContext = JAXBContext.newInstance(CVizSyslogEventXMLRule.class);
+				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				CVizTrapEventXMLRule rule = (CVizTrapEventXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
+				logger.info("Load rule file " + rule.getRuleName());
+				list.add(rule);
+			}
+		}else if(ruleType.equalsIgnoreCase("database")) {
+		}else {
 		}
 		return list;
 	}

@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import com.cviz.geode.common.domain.PreProcRule;
 
-public class CVizSyslogEventDBRule extends CVizSyslogEventRule {
+public class CVizTrapEventDBRule extends CVizTrapEventRule {
 
-	public CVizSyslogEventDBRule(PreProcRule preProcRule) {
+	public CVizTrapEventDBRule(PreProcRule preProcRule) {
 		this.ruleID = preProcRule.getRuleID();
 		this.active = preProcRule.getActive();
 		this.ruleName = preProcRule.getRuleName();
@@ -19,8 +19,8 @@ public class CVizSyslogEventDBRule extends CVizSyslogEventRule {
 		this.procMode = preProcRule.getProcMode();
 		this.alertSeverity = Integer.parseInt(preProcRule.getAlertSeverity());
 		this.receiveTimePattern = preProcRule.getReceiveTimePattern();
-		this.syslogMatchPattern = preProcRule.getSyslogMatchPattern();
-		this.syslogMatchNode = preProcRule.getSyslogMatchNode();
+		this.trapSeparator = preProcRule.getTrapSeparator();
+		this.trapConditions = preProcRule.getTrapConditions();
 		populateRuleVariables(preProcRule.getRuleVariables());
 		populateRuleFields(preProcRule.getRuleVariables());
 		

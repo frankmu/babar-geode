@@ -2,7 +2,7 @@ package com.cviz.geode.rule;
 
 import java.util.List;
 
-public class CVizEventRule {
+public abstract class CVizEventRule {
 	
 	protected String ruleID; 							//策略编号 (自动生成)
 	protected Boolean active; 							//使用状态(true, false)
