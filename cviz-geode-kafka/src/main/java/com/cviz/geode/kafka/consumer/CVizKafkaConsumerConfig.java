@@ -30,12 +30,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
 import com.cviz.geode.rule.CVizEventType;
-import com.cviz.geode.rule.CVizSyslogEventRule;
-import com.cviz.geode.rule.CVizSyslogEventRuleCondition;
-import com.cviz.geode.rule.CVizSyslogEventXMLRule;
-import com.cviz.geode.rule.CVizTrapEventRule;
-import com.cviz.geode.rule.CVizTrapEventRuleCondition;
-import com.cviz.geode.rule.CVizTrapEventXMLRule;
+import com.cviz.geode.rule.syslog.CVizSyslogEventRule;
+import com.cviz.geode.rule.syslog.CVizSyslogEventRuleCondition;
+import com.cviz.geode.rule.syslog.CVizSyslogEventXMLRule;
+import com.cviz.geode.rule.trap.CVizTrapEventRule;
+import com.cviz.geode.rule.trap.CVizTrapEventRuleCondition;
+import com.cviz.geode.rule.trap.CVizTrapEventXMLRule;
 
 @Configuration
 public class CVizKafkaConsumerConfig {

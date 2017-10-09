@@ -11,7 +11,7 @@ public abstract class CVizEventRule {
 	protected int ruleSeq;								//优先序号
 	protected String procMode;							//处理方式
 	protected int alertSeverity;							//告警级别
-	protected String receiveTimePattern;					//regex: 接收消息时间的pattern
+	protected String receiveTimeFormat;					//接收消息时间的pattern: Java date standard format
 	protected List<CVizEventRuleVariable> ruleVariables;	//定义从消息中提取出的变量
 	protected List<CVizEventRuleField> ruleFields;		//定义标准化入库字段
 
@@ -57,11 +57,11 @@ public abstract class CVizEventRule {
 	public void setAlertSeverity(int alertSeverity) {
 		this.alertSeverity = alertSeverity;
 	}
-	public String getReceiveTimePattern() {
-		return receiveTimePattern;
+	public String getReceiveTimeFormat() {
+		return receiveTimeFormat;
 	}
-	public void setReceiveTimePattern(String receiveTimePattern) {
-		this.receiveTimePattern = receiveTimePattern;
+	public void setReceiveTimeFormat(String receiveTimeFormat) {
+		this.receiveTimeFormat = receiveTimeFormat;
 	}
 	public List<CVizEventRuleVariable> getRuleVariables() {
 		return ruleVariables;

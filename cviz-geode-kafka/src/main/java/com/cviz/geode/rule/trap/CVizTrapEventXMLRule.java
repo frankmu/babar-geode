@@ -1,4 +1,4 @@
-package com.cviz.geode.rule;
+package com.cviz.geode.rule.trap;
 
 import java.util.List;
 
@@ -6,8 +6,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.cviz.geode.rule.CVizEventRuleCondition;
+import com.cviz.geode.rule.CVizEventRuleField;
+import com.cviz.geode.rule.CVizEventRuleVariable;
+
 @XmlRootElement(name="rule", namespace="http://www.example.org/cviz-rule")
-public class CVizSyslogEventXMLRule extends CVizSyslogEventRule {
+public class CVizTrapEventXMLRule extends CVizTrapEventRule {
 
 	@Override
 	@XmlElement(namespace="http://www.example.org/cviz-rule")
@@ -40,9 +44,15 @@ public class CVizSyslogEventXMLRule extends CVizSyslogEventRule {
 	}
 
 	@Override
-	@XmlElement(name="timestamp-pattern", namespace="http://www.example.org/cviz-rule")
-	public void setReceiveTimePattern(String receiveTimePattern) {
-		this.receiveTimePattern = receiveTimePattern;
+	@XmlElement(name="timestamp-format", namespace="http://www.example.org/cviz-rule")
+	public void setReceiveTimeFormat(String receiveTimeFormat) {
+		this.receiveTimeFormat = receiveTimeFormat;
+	}
+
+	@Override
+	@XmlElement(name="trap-receivetime-pattern", namespace="http://www.example.org/cviz-rule")
+	public void setTrapReceiveTimePattern(String trapReceiveTimePattern) {
+		this.trapReceiveTimePattern = trapReceiveTimePattern;
 	}
 
 	@Override
@@ -61,13 +71,14 @@ public class CVizSyslogEventXMLRule extends CVizSyslogEventRule {
 
 	@Override
 	@XmlElement(name="match-pattern", namespace="http://www.example.org/cviz-rule")
-	public void setSyslogMatchPattern(String syslogMatchPattern) {
-		this.syslogMatchPattern = syslogMatchPattern;
+	public void setTrapSeparator(String trapSeparator) {
+		this.trapSeparator = trapSeparator;
 	}
 
 	@Override
-	@XmlElement(name="node-name", namespace="http://www.example.org/cviz-rule")
-	public void setNodeName(String syslogMatchNode) {
-		this.syslogMatchNode = syslogMatchNode;
+	@XmlElementWrapper(name = "conditions", namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="condition", namespace="http://www.example.org/cviz-rule")
+	public void setTrapConditions(List<CVizEventRuleCondition> trapConditions) {
+		this.trapConditions = trapConditions;
 	}
 }

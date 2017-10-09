@@ -13,7 +13,7 @@ public class PreProcRule implements Serializable{
 	private String ruleSeq;				//优先序号
 	private String procMode;				//处理方式
 	private String alertSeverity;		//告警级别
-	private String receiveTimePattern;	//regex: 接收消息时间的pattern
+	private String getReceiveTimeFormat;	//regex: 接收消息时间的pattern
 	private String ruleVariables;		//json: 定义从消息中提取出的变量
 	private String ruleFields;			//json: 定义标准化入库字段
 
@@ -64,11 +64,11 @@ public class PreProcRule implements Serializable{
 	public void setAlertSeverity(String alertSeverity) {
 		this.alertSeverity = alertSeverity;
 	}
-	public String getReceiveTimePattern() {
-		return receiveTimePattern;
+	public String getReceiveTimeFormat() {
+		return getReceiveTimeFormat;
 	}
-	public void setReceiveTimePattern(String receiveTimePattern) {
-		this.receiveTimePattern = receiveTimePattern;
+	public void setReceiveTimeFormat(String getReceiveTimeFormat) {
+		this.getReceiveTimeFormat = getReceiveTimeFormat;
 	}
 	public String getRuleVariables() {
 		return ruleVariables;

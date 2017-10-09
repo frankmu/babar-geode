@@ -1,11 +1,7 @@
 package com.cviz.geode.kafka.consumer;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,22 +17,23 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import com.cviz.geode.common.api.AlertService;
 import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.kafka.util.CvizKafkaUtils;
+import com.cviz.geode.rule.CVizEventRuleCondition;
 import com.cviz.geode.rule.CVizEventRuleField;
-import com.cviz.geode.rule.CVizSyslogEventRule;
-import com.cviz.geode.rule.CVizTrapEventRule;
+import com.cviz.geode.rule.trap.CVizTrapEventRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CVizTrapProcessor {
 	private List<ConsumerRecord<String, String>> records;
-	private List<CVizTrapEventRule> cvizEventRules;
+	private List<CVizTrapEventRule> cvizTrapEventRules;
 	private AlertService alertService;
 	private List<Alert> newAlerts;
 	private final Log logger = LogFactory.getLog(CVizTrapProcessor.class);
 
-	public CVizTrapProcessor(List<ConsumerRecord<String, String>> records, List<CVizTrapEventRule> cvizEventRules, AlertService alertService) {
+	public CVizTrapProcessor(List<ConsumerRecord<String, String>> records, List<CVizTrapEventRule> cvizTrapEventRules, AlertService alertService) {
 		this.records = records;
-		this.cvizEventRules = cvizEventRules;
+		this.cvizTrapEventRules = cvizTrapEventRules;
 		this.alertService = alertService;
 		this.newAlerts = new ArrayList<Alert>();
 	}
@@ -44,8 +41,8 @@ public class CVizTrapProcessor {
 	public void process() {
 		for(ConsumerRecord<String, String> record : this.records){
 			ObjectNode node = getJsonObjectNode(record.value());
-			if (node.has("message") && node.has("@timestamp")) {
-				processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
+			if (node.has("message")) {
+				processMessage(node.get("message").textValue());
 			}
 		}
 		if(alertService.saveAll(this.newAlerts)) {
@@ -65,66 +62,60 @@ public class CVizTrapProcessor {
 		return node;
 	}
 
-	private void processMessage(String message, String timestamp){
-//		for (CVizTrapEventRule rule : cvizEventRules) {
-//			if (message.matches(rule.getSyslogMatchPattern())) {
-//				Pattern pattern = Pattern.compile(rule.getSyslogMatchPattern());
-//				Matcher matcher = pattern.matcher(message);
-//				if (matcher.matches()) {
-//					Map<String, String> variableMap = new HashMap<String, String>();
-//					for (int i = 0; i < rule.getRuleVariables().size(); i++) {
-//						variableMap.put("$" + rule.getRuleVariables().get(i).getValue(), matcher.group(i + 1));
-//					}
-//					Alert alert = new Alert();
-//					alert.setAlertUID(UUID.randomUUID().toString());
-//					alert.setSeverity(rule.getAlertSeverity());
-//					alert.setSourceMsg(message);
-//					alert.setMatchPrePolicy(rule.getRuleName());
-//					PropertyAccessor myAccessor = PropertyAccessorFactory.forBeanPropertyAccess(alert);
-//					for (CVizEventRuleField field : rule.getRuleFields()) {
-//						String value = field.getValue();
-//						for (Map.Entry<String, String> entry : variableMap.entrySet()) {
-//							if (value.contains(entry.getKey())) {
-//								value = value.replace(entry.getKey(), entry.getValue());
-//							}
-//						}
-//						if("timestamp".equals(field.getKey())){
-//							setTimestampForAlert(alert, value, rule.getReceiveTimePattern());
-//							continue;
-//						}
-//						myAccessor.setPropertyValue(field.getKey(), value);
-//					}
-//					setReceivedTime(alert, timestamp);
-//					newAlerts.add(alert);
-//					continue;
-//				}
-//			}
-//		}
-	}
-
-	private void setTimestampForAlert(Alert alert, String timestamp, String pattern){
-		try {
-			SimpleDateFormat dt = new SimpleDateFormat(pattern);
-			Date date = dt.parse(timestamp);
-			if(!pattern.contains("yyyy")){
-				Calendar c = Calendar.getInstance();
-				c.setTime(date);
-				c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-				date = c.getTime();
+	private void processMessage(String message){
+		for (CVizTrapEventRule rule : cvizTrapEventRules) {
+			Pattern trapReceivePattern = Pattern.compile(rule.getTrapReceiveTimePattern());
+			Matcher trapReceiveMatcher = trapReceivePattern.matcher(message);
+			if (!trapReceiveMatcher.find()) {
+			    continue;
 			}
-			alert.setFaultTime(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
+			String receiveTime = trapReceiveMatcher.group(1);
+			String formattedMessage = message.replace("receiveTime","").trim();
+			String[] messageTokens = formattedMessage.split(rule.getTrapSeparator());
+			if(isMessageMatchRule(messageTokens, rule.getTrapConditions())) {
+				continue;
+			}
+			
+			Map<String, String> variableMap = new HashMap<String, String>();
+			for (int i = 0; i < rule.getRuleVariables().size(); i++) {
+				int variableIndex = Integer.parseInt(rule.getRuleVariables().get(i).getIndex());
+				variableMap.put("$" + rule.getRuleVariables().get(i).getValue(), messageTokens[variableIndex]);
+			}
+			variableMap.put("$receiveTime", receiveTime);
+			Alert alert = new Alert();
+			alert.setAlertUID(UUID.randomUUID().toString());
+			alert.setSeverity(rule.getAlertSeverity()); 
+			alert.setSourceMsg(message);
+			alert.setMatchPrePolicy(rule.getRuleName());
+			PropertyAccessor myAccessor = PropertyAccessorFactory.forBeanPropertyAccess(alert);
+			for (CVizEventRuleField field : rule.getRuleFields()) {
+				String value = field.getValue();
+				for (Map.Entry<String, String> entry : variableMap.entrySet()) {
+					if (value.contains(entry.getKey())) {
+						value = value.replace(entry.getKey(), entry.getValue());
+					}
+				}
+				if("receiveTime".equals(field.getKey())){
+					alert.setReceiveTime(CvizKafkaUtils.getFormattedTimestamp(value, rule.getReceiveTimeFormat()));
+					continue;
+				}
+				myAccessor.setPropertyValue(field.getKey(), value);
+			}
+			newAlerts.add(alert);
+			break;
 		}
 	}
 
-	private void setReceivedTime(Alert alert, String time){
-		try {
-			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			Date date = dt.parse(time);
-			alert.setReceiveTime(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
+	private boolean isMessageMatchRule(String[] tokens, List<CVizEventRuleCondition> conditions) {
+		for(CVizEventRuleCondition condition: conditions) {
+			int index = Integer.parseInt(condition.getIndex());
+			if(index >= tokens.length) {
+				return false;
+			}
+			if(!tokens[index].matches(condition.getValue())) {
+				return false;
+			}
 		}
+		return true;
 	}
 }

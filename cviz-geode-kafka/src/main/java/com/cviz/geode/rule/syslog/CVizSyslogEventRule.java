@@ -1,4 +1,6 @@
-package com.cviz.geode.rule;
+package com.cviz.geode.rule.syslog;
+
+import com.cviz.geode.rule.CVizEventRule;
 
 public class CVizSyslogEventRule extends CVizEventRule {
 

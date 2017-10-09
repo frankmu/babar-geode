@@ -13,8 +13,8 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.cviz.geode.rule.CVizSyslogEventXMLRule;
 import com.cviz.geode.rule.CVizEventRuleField;
+import com.cviz.geode.rule.syslog.CVizSyslogEventXMLRule;
 
 @Controller
 public class CVizTestController {

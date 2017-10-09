@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 
 import com.cviz.geode.common.api.AlertService;
-import com.cviz.geode.rule.CVizTrapEventRule;
+import com.cviz.geode.rule.trap.CVizTrapEventRule;
 
 public class CVizKafkaConsumerTrapListener implements CVizKafkaConsumerListener{
 
@@ -19,7 +19,7 @@ public class CVizKafkaConsumerTrapListener implements CVizKafkaConsumerListener{
 	private AlertService alertService;
 
 	@Override
-	@KafkaListener(topics = "${kafka.topic.name}", containerFactory = "kafkaListenerContainerFactory")
+	@KafkaListener(topics = "${kafka.consumer.topic.name}", containerFactory = "kafkaListenerContainerFactory")
 	public void listenPartition0(List<ConsumerRecord<String, String>> records, Acknowledgment ack) {
 		CVizTrapProcessor processor = new CVizTrapProcessor(records, cvizEventRules, alertService);
 		processor.process();

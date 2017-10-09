@@ -1,11 +1,7 @@
 package com.cviz.geode.kafka.consumer;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +17,10 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import com.cviz.geode.common.api.AlertService;
 import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.kafka.producer.CVizKafkaProducerSender;
+import com.cviz.geode.kafka.util.CvizKafkaUtils;
 import com.cviz.geode.rule.CVizEventRuleField;
-import com.cviz.geode.rule.CVizSyslogEventRule;
+import com.cviz.geode.rule.syslog.CVizSyslogEventRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -30,28 +28,45 @@ public class CVizSyslogProcessor {
 	private List<ConsumerRecord<String, String>> records;
 	private List<CVizSyslogEventRule> cvizEventRules;
 	private AlertService alertService;
+	private CVizKafkaProducerSender cVizKafkaProducerSender;
 	private List<Alert> newAlerts;
+	private Boolean enableCorrProcess;
 	private final Log logger = LogFactory.getLog(CVizSyslogProcessor.class);
 
-	public CVizSyslogProcessor(List<ConsumerRecord<String, String>> records, List<CVizSyslogEventRule> cvizEventRules, AlertService alertService) {
+	public CVizSyslogProcessor(List<ConsumerRecord<String, String>> records, List<CVizSyslogEventRule> cvizEventRules, AlertService alertService, CVizKafkaProducerSender cVizKafkaProducerSender) {
+		this(records, cvizEventRules, alertService, cVizKafkaProducerSender, false);
+	}
+
+	public CVizSyslogProcessor(List<ConsumerRecord<String, String>> records,
+			List<CVizSyslogEventRule> cvizEventRules,
+			AlertService alertService,
+			CVizKafkaProducerSender cVizKafkaProducerSender,
+			Boolean enableCorrProcess) {
 		this.records = records;
 		this.cvizEventRules = cvizEventRules;
 		this.alertService = alertService;
+		this.cVizKafkaProducerSender = cVizKafkaProducerSender;
 		this.newAlerts = new ArrayList<Alert>();
+		this.enableCorrProcess = enableCorrProcess;
 	}
 
 	public void process() {
 		for(ConsumerRecord<String, String> record : this.records){
 			ObjectNode node = getJsonObjectNode(record.value());
-			if (node.has("message") && node.has("@timestamp")) {
-				processMessage(node.get("message").textValue(), node.get("@timestamp").textValue());
+			if (node.has("message")) {
+				processMessage(node.get("message").textValue());
 			}
 		}
-		if(alertService.saveAll(this.newAlerts)) {
-			for(Alert alert : this.newAlerts) {
-				logger.info("Insert alert to database - message: " + alert.getSourceMsg());
+		if(enableCorrProcess) {
+			if(alertService.saveAll(this.newAlerts)) {
+				for(Alert alert : this.newAlerts) {
+					logger.info("Insert alert to database - message: " + alert.getSourceMsg());
+				}
 			}
+		}else {
+			cVizKafkaProducerSender.sendForCorrProcess(newAlerts);
 		}
+		
 	}
 
 	private ObjectNode getJsonObjectNode(String message) {
@@ -64,7 +79,7 @@ public class CVizSyslogProcessor {
 		return node;
 	}
 
-	private void processMessage(String message, String timestamp){
+	private void processMessage(String message){
 		for (CVizSyslogEventRule rule : cvizEventRules) {
 			if (message.matches(rule.getSyslogMatchPattern())) {
 				Pattern pattern = Pattern.compile(rule.getSyslogMatchPattern());
@@ -87,43 +102,21 @@ public class CVizSyslogProcessor {
 								value = value.replace(entry.getKey(), entry.getValue());
 							}
 						}
-						if("timestamp".equals(field.getKey())){
-							setTimestampForAlert(alert, value, rule.getReceiveTimePattern());
+						if("receiveTime".equals(field.getKey())){
+							alert.setReceiveTime(CvizKafkaUtils.getFormattedTimestamp(value, rule.getReceiveTimeFormat()));
+							continue;
+						}
+						//TODO Need to transform the fault time to UTC, now just copy the data from receive time.
+						if("faultTime".equals(field.getKey())){
+							alert.setFaultTime(alert.getReceiveTime());
 							continue;
 						}
 						myAccessor.setPropertyValue(field.getKey(), value);
 					}
-					setReceivedTime(alert, timestamp);
 					newAlerts.add(alert);
-					continue;
+					break;
 				}
 			}
-		}
-	}
-
-	private void setTimestampForAlert(Alert alert, String timestamp, String pattern){
-		try {
-			SimpleDateFormat dt = new SimpleDateFormat(pattern);
-			Date date = dt.parse(timestamp);
-			if(!pattern.contains("yyyy")){
-				Calendar c = Calendar.getInstance();
-				c.setTime(date);
-				c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-				date = c.getTime();
-			}
-			alert.setFaultTime(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void setReceivedTime(Alert alert, String time){
-		try {
-			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-			Date date = dt.parse(time);
-			alert.setReceiveTime(date.getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
 	}
 }
