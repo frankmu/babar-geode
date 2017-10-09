@@ -57,7 +57,7 @@ public class CVizSyslogProcessor {
 				processMessage(node.get("message").textValue());
 			}
 		}
-		if(enableCorrProcess) {
+		if(!enableCorrProcess) {
 			if(alertService.saveAll(this.newAlerts)) {
 				for(Alert alert : this.newAlerts) {
 					logger.info("Insert alert to database - message: " + alert.getSourceMsg());

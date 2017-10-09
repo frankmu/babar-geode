@@ -17,9 +17,11 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 import com.cviz.geode.common.api.AlertService;
 import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.kafka.producer.CVizKafkaProducerSender;
 import com.cviz.geode.kafka.util.CvizKafkaUtils;
 import com.cviz.geode.rule.CVizEventRuleCondition;
 import com.cviz.geode.rule.CVizEventRuleField;
+import com.cviz.geode.rule.syslog.CVizSyslogEventRule;
 import com.cviz.geode.rule.trap.CVizTrapEventRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -28,14 +30,26 @@ public class CVizTrapProcessor {
 	private List<ConsumerRecord<String, String>> records;
 	private List<CVizTrapEventRule> cvizTrapEventRules;
 	private AlertService alertService;
+	private CVizKafkaProducerSender cVizKafkaProducerSender;
 	private List<Alert> newAlerts;
+	private Boolean enableCorrProcess;
 	private final Log logger = LogFactory.getLog(CVizTrapProcessor.class);
 
-	public CVizTrapProcessor(List<ConsumerRecord<String, String>> records, List<CVizTrapEventRule> cvizTrapEventRules, AlertService alertService) {
+	public CVizTrapProcessor(List<ConsumerRecord<String, String>> records, List<CVizTrapEventRule> cvizEventRules, AlertService alertService, CVizKafkaProducerSender cVizKafkaProducerSender) {
+		this(records, cvizEventRules, alertService, cVizKafkaProducerSender, false);
+	}
+
+	public CVizTrapProcessor(List<ConsumerRecord<String, String>> records,
+			List<CVizTrapEventRule> cvizTrapEventRules,
+			AlertService alertService,
+			CVizKafkaProducerSender cVizKafkaProducerSender,
+			Boolean enableCorrProcess) {
 		this.records = records;
 		this.cvizTrapEventRules = cvizTrapEventRules;
 		this.alertService = alertService;
+		this.cVizKafkaProducerSender = cVizKafkaProducerSender;
 		this.newAlerts = new ArrayList<Alert>();
+		this.enableCorrProcess = enableCorrProcess;
 	}
 
 	public void process() {
@@ -45,10 +59,14 @@ public class CVizTrapProcessor {
 				processMessage(node.get("message").textValue());
 			}
 		}
-		if(alertService.saveAll(this.newAlerts)) {
-			for(Alert alert : this.newAlerts) {
-				logger.info("Insert alert to database - message: " + alert.getSourceMsg());
+		if(!enableCorrProcess) {
+			if(alertService.saveAll(this.newAlerts)) {
+				for(Alert alert : this.newAlerts) {
+					logger.info("Insert alert to database - message: " + alert.getSourceMsg());
+				}
 			}
+		}else {
+			cVizKafkaProducerSender.sendForCorrProcess(newAlerts);
 		}
 	}
 
