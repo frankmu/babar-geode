@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../cviz-geode-parent/pom.xml</relativePath>
 	</parent>
-	<artifactId>cviz-geode-kafka</artifactId>
+	<artifactId>cviz-geode-preprocess</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>

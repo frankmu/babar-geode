@@ -21,7 +21,6 @@ import com.cviz.geode.kafka.producer.CVizKafkaProducerSender;
 import com.cviz.geode.kafka.util.CvizKafkaUtils;
 import com.cviz.geode.rule.CVizEventRuleCondition;
 import com.cviz.geode.rule.CVizEventRuleField;
-import com.cviz.geode.rule.syslog.CVizSyslogEventRule;
 import com.cviz.geode.rule.trap.CVizTrapEventRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

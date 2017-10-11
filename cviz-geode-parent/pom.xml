@@ -21,7 +21,7 @@
 	<modules>
 		<module>../cviz-geode-common</module>
 		<module>../cviz-geode-rest</module>
-		<module>../cviz-geode-kafka</module>
+		<module>../cviz-geode-preprocess</module>
 	</modules>
 	<build>
 		<pluginManagement>
