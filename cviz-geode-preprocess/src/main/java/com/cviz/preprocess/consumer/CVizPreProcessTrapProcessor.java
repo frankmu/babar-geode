@@ -25,20 +25,20 @@ import com.cviz.preprocess.util.CvizPreProcessUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class CVizPreProcessProcessor {
+public class CVizPreProcessTrapProcessor {
 	private List<ConsumerRecord<String, String>> records;
 	private List<CVizPreProcessTrapRule> cvizTrapEventRules;
 	private AlertService alertService;
 	private CVizPreProcessProducerSender cVizKafkaProducerSender;
 	private List<Alert> newAlerts;
 	private Boolean enableCorrProcess;
-	private final Log logger = LogFactory.getLog(CVizPreProcessProcessor.class);
+	private final Log logger = LogFactory.getLog(CVizPreProcessTrapProcessor.class);
 
-	public CVizPreProcessProcessor(List<ConsumerRecord<String, String>> records, List<CVizPreProcessTrapRule> cvizEventRules, AlertService alertService, CVizPreProcessProducerSender cVizKafkaProducerSender) {
+	public CVizPreProcessTrapProcessor(List<ConsumerRecord<String, String>> records, List<CVizPreProcessTrapRule> cvizEventRules, AlertService alertService, CVizPreProcessProducerSender cVizKafkaProducerSender) {
 		this(records, cvizEventRules, alertService, cVizKafkaProducerSender, false);
 	}
 
-	public CVizPreProcessProcessor(List<ConsumerRecord<String, String>> records,
+	public CVizPreProcessTrapProcessor(List<ConsumerRecord<String, String>> records,
 			List<CVizPreProcessTrapRule> cvizTrapEventRules,
 			AlertService alertService,
 			CVizPreProcessProducerSender cVizKafkaProducerSender,

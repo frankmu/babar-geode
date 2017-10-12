@@ -14,25 +14,25 @@ import com.cviz.preprocess.rule.CVizPreProcessRuleVariable;
 public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 
 	@Override
-	@XmlElement(namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="name", namespace="http://www.example.org/cviz-rule")
 	public void setRuleName(String ruleName) {
 		this.ruleName = ruleName;
 	}
 
 	@Override
-	@XmlElement(namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="priority", namespace="http://www.example.org/cviz-rule")
 	public void setRuleSeq(int ruleSeq) {
 		this.ruleSeq = ruleSeq;
 	}
 
 	@Override
-	@XmlElement(namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="action", namespace="http://www.example.org/cviz-rule")
 	public void setProcMode(String procMode) {
 		this.procMode = procMode;
 	}
 
 	@Override
-	@XmlElement(namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="severity", namespace="http://www.example.org/cviz-rule")
 	public void setAlertSeverity(int alertSeverity) {
 		this.alertSeverity = alertSeverity;
 	}

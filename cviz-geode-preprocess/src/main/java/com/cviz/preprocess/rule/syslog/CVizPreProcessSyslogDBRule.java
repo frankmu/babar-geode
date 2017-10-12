@@ -32,7 +32,9 @@ public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 		JSONObject jObject = new JSONObject(jsonString);
 		List<CVizPreProcessRuleVariable> variables = new ArrayList<CVizPreProcessRuleVariable>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleVariable variable = new CVizPreProcessRuleVariable(key, jObject.getString(key));
+			CVizPreProcessRuleVariable variable = new CVizPreProcessRuleVariable();
+			variable.setIndex(key);
+			variable.setValue(jObject.getString(key));
 			variables.add(variable);
 	    }
 		Collections.sort(variables);
@@ -42,7 +44,9 @@ public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 		JSONObject jObject = new JSONObject(jsonString);
 		List<CVizPreProcessRuleField> variables = new ArrayList<CVizPreProcessRuleField>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleField variable = new CVizPreProcessRuleField(key, jObject.getString(key));
+			CVizPreProcessRuleField variable = new CVizPreProcessRuleField();
+			variable.setKey(key);
+			variable.setValue(jObject.getString(key));
 			variables.add(variable);
 	    }
 	}

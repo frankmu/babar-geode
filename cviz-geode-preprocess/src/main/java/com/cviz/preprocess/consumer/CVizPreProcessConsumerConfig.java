@@ -52,13 +52,13 @@ public class CVizPreProcessConsumerConfig {
 	@Value("${kafka.consumer.batch.size}")
 	private String kafkaConsumerbatchSize;
 
-	@Value("${rule.files}")
+	@Value("${preprocess.rule.files}")
 	private Resource[] files;
 
-	@Value("${rule.type}")
+	@Value("${preprocess.rule.type}")
 	private String ruleType;
 
-	@Value("${rule.source}")
+	@Value("${preprocess.rule.source}")
 	private String ruleSource;
 
 	private final Log logger = LogFactory.getLog(CVizPreProcessConsumerConfig.class);
@@ -115,12 +115,12 @@ public class CVizPreProcessConsumerConfig {
 	@Conditional(CVizPreProcessSyslogRuleCondition.class)
 	public List<CVizPreProcessSyslogRule> getCVizSyslogEventRule() throws IOException, JAXBException{
 		List<CVizPreProcessSyslogRule> list = new ArrayList<CVizPreProcessSyslogRule>();
-		if(ruleType.equalsIgnoreCase("file")) {
+		if(ruleSource.equalsIgnoreCase("file")) {
 			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
 			for(Resource file : files){
 				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessSyslogXMLRule.class);
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				CVizPreProcessSyslogXMLRule rule = (CVizPreProcessSyslogXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
+				CVizPreProcessSyslogRule rule = (CVizPreProcessSyslogRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
 				logger.info("Load rule file " + rule.getRuleName());
 				list.add(rule);
 			}
@@ -134,7 +134,7 @@ public class CVizPreProcessConsumerConfig {
 	@Conditional(CVizPreProcessTrapRuleCondition.class)
 	public List<CVizPreProcessTrapRule> getCVizTrapEventRule() throws IOException, JAXBException{
 		List<CVizPreProcessTrapRule> list = new ArrayList<CVizPreProcessTrapRule>();
-		if(ruleType.equalsIgnoreCase("file")) {
+		if(ruleSource.equalsIgnoreCase("file")) {
 			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
 			for(Resource file : files){
 				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessSyslogXMLRule.class);

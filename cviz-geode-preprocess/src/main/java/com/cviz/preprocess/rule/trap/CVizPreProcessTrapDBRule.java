@@ -32,7 +32,9 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 		JSONObject jObject = new JSONObject(jsonString);
 		List<CVizPreProcessRuleVariable> variables = new ArrayList<CVizPreProcessRuleVariable>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleVariable variable = new CVizPreProcessRuleVariable(key, jObject.getString(key));
+			CVizPreProcessRuleVariable variable = new CVizPreProcessRuleVariable();
+			variable.setIndex(key);
+			variable.setValue(jObject.getString(key));
 			variables.add(variable);
 	    }
 		Collections.sort(variables);
@@ -43,7 +45,9 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 		JSONObject jObject = new JSONObject(jsonString);
 		List<CVizPreProcessRuleField> fields = new ArrayList<CVizPreProcessRuleField>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleField field = new CVizPreProcessRuleField(key, jObject.getString(key));
+			CVizPreProcessRuleField field = new CVizPreProcessRuleField();
+			field.setKey(key);
+			field.setValue(jObject.getString(key));
 			fields.add(field);
 	    }
 		this.ruleFields = fields;
