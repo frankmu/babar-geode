@@ -66,7 +66,6 @@ public class CVizPreProcessSyslogProcessor {
 		}else {
 			cVizKafkaProducerSender.sendForCorrProcess(newAlerts);
 		}
-		
 	}
 
 	private ObjectNode getJsonObjectNode(String message) {
