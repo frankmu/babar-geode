@@ -57,7 +57,9 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 		JSONObject jObject = new JSONObject(jsonString);
 		List<CVizPreProcessRuleCondition> conditions = new ArrayList<CVizPreProcessRuleCondition>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleCondition condition = new CVizPreProcessRuleCondition(key, jObject.getString(key));
+			CVizPreProcessRuleCondition condition = new CVizPreProcessRuleCondition();
+			condition.setIndex(key);
+			condition.setValue(jObject.getString(key));
 			conditions.add(condition);
 	    }
 		this.trapConditions = conditions;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule xmlns="http://www.example.org/cviz-rule"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/cviz-rule cviz-rule.xsd ">
+	<name>cisco-linkdown</name>
+	<priority>2</priority>
+	<action>+</action>
+	<severity>1</severity>
+	<node-name>.*</node-name>
+	<rule-type>cisco</rule-type>
+	<receivetime-format>yyyy/MM/dd HH:mm:ss</receivetime-format>
+	<trap-seperator>;</trap-seperator>
+	<trap-receivetime-pattern>\[(\d{4}\/\d{1,2}\/\d{2}\s+\d{2}:\d{2}:\d{2})\]</trap-receivetime-pattern>
+	<conditions>
+		<condition index="8">.*down</condition>
+	</conditions>
+	<variables>
+		<variable index="0">hostname</variable>
+		<variable index="6">interfacename</variable>
+	</variables>
+	<fields>
+		<field key="receiveTime">$receivetime</field>
+		<field key="alertMsg">$hostname on the $interfacename is down at $receivetime</field>
+	</fields>
+</rule>

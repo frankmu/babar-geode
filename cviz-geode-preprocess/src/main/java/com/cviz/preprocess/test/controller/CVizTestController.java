@@ -54,6 +54,6 @@ public class CVizTestController {
 		return null;
 	}
 
-	@Autowired
-	private List<CVizPreProcessSyslogRule> cvizEventRules;
+//	@Autowired
+//	private List<CVizPreProcessSyslogRule> cvizEventRules;
 }

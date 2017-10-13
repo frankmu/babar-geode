@@ -137,7 +137,7 @@ public class CVizPreProcessConsumerConfig {
 		if(ruleSource.equalsIgnoreCase("file")) {
 			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
 			for(Resource file : files){
-				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessSyslogXMLRule.class);
+				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessTrapXMLRule.class);
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				CVizPreProcessTrapXMLRule rule = (CVizPreProcessTrapXMLRule) jaxbUnmarshaller.unmarshal(file.getInputStream());
 				logger.info("Load rule file " + rule.getRuleName());

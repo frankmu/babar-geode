@@ -83,13 +83,15 @@ public class CVizPreProcessTrapProcessor {
 		for (CVizPreProcessTrapRule rule : cvizTrapEventRules) {
 			Pattern trapReceivePattern = Pattern.compile(rule.getTrapReceiveTimePattern());
 			Matcher trapReceiveMatcher = trapReceivePattern.matcher(message);
-			if (!trapReceiveMatcher.find()) {
+			if (!trapReceiveMatcher.find() || trapReceiveMatcher.groupCount() < 1) {
+				logger.info("Cannot match rule " + rule.getRuleName() + " with message ["+ message + "] on receiveTime Pattern.");
 			    continue;
 			}
 			String receiveTime = trapReceiveMatcher.group(1);
-			String formattedMessage = message.replace("receiveTime","").trim();
+			String formattedMessage = message.replace(trapReceiveMatcher.group(0),"").trim();
 			String[] messageTokens = formattedMessage.split(rule.getTrapSeparator());
-			if(isMessageMatchRule(messageTokens, rule.getTrapConditions())) {
+			// if not match this rule, continue to next rule and skip the following processing
+			if(!isMessageMatchRule(messageTokens, rule.getTrapConditions())) {
 				continue;
 			}
 			
@@ -98,7 +100,7 @@ public class CVizPreProcessTrapProcessor {
 				int variableIndex = Integer.parseInt(rule.getRuleVariables().get(i).getIndex());
 				variableMap.put("$" + rule.getRuleVariables().get(i).getValue(), messageTokens[variableIndex]);
 			}
-			variableMap.put("$receiveTime", receiveTime);
+			variableMap.put("$receivetime", receiveTime);
 			Alert alert = new Alert();
 			alert.setAlertUID(UUID.randomUUID().toString());
 			alert.setSeverity(rule.getAlertSeverity()); 
@@ -126,10 +128,7 @@ public class CVizPreProcessTrapProcessor {
 	private boolean isMessageMatchRule(String[] tokens, List<CVizPreProcessRuleCondition> conditions) {
 		for(CVizPreProcessRuleCondition condition: conditions) {
 			int index = Integer.parseInt(condition.getIndex());
-			if(index >= tokens.length) {
-				return false;
-			}
-			if(!tokens[index].matches(condition.getValue())) {
+			if(index >= tokens.length || !tokens[index].trim().matches(condition.getValue())) {
 				return false;
 			}
 		}

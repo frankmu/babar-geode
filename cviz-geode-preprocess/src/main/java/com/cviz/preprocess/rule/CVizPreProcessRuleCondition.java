@@ -8,11 +8,6 @@ public class CVizPreProcessRuleCondition {
 	private String index;
 	private String value;
 
-	public CVizPreProcessRuleCondition(String index, String value) {
-		this.index = index;
-		this.value = value;
-	}
-
 	public String getIndex() {
 		return index;
 	}

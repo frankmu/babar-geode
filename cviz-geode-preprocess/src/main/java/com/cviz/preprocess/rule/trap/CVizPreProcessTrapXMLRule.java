@@ -44,7 +44,7 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 	}
 
 	@Override
-	@XmlElement(name="timestamp-format", namespace="http://www.example.org/cviz-rule")
+	@XmlElement(name="receivetime-format", namespace="http://www.example.org/cviz-rule")
 	public void setReceiveTimeFormat(String receiveTimeFormat) {
 		this.receiveTimeFormat = receiveTimeFormat;
 	}
@@ -55,11 +55,19 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 		this.trapReceiveTimePattern = trapReceiveTimePattern;
 	}
 
+	public List<CVizPreProcessRuleVariable> getRuleVariables() {
+		return ruleVariables;
+	}
+
 	@Override
 	@XmlElementWrapper(name = "variables", namespace="http://www.example.org/cviz-rule")
 	@XmlElement(name="variable", namespace="http://www.example.org/cviz-rule")
 	public void setRuleVariables(List<CVizPreProcessRuleVariable> ruleVariables) {
 		this.ruleVariables = ruleVariables;
+	}
+
+	public List<CVizPreProcessRuleField> getRuleFields() {
+		return ruleFields;
 	}
 
 	@Override
@@ -69,10 +77,8 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 		this.ruleFields = ruleFields;
 	}
 
-	@Override
-	@XmlElement(name="match-pattern", namespace="http://www.example.org/cviz-rule")
-	public void setTrapSeparator(String trapSeparator) {
-		this.trapSeparator = trapSeparator;
+	public List<CVizPreProcessRuleCondition> getTrapConditions() {
+		return trapConditions;
 	}
 
 	@Override
@@ -80,5 +86,11 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 	@XmlElement(name="condition", namespace="http://www.example.org/cviz-rule")
 	public void setTrapConditions(List<CVizPreProcessRuleCondition> trapConditions) {
 		this.trapConditions = trapConditions;
+	}
+
+	@Override
+	@XmlElement(name="trap-seperator", namespace="http://www.example.org/cviz-rule")
+	public void setTrapSeparator(String trapSeparator) {
+		this.trapSeparator = trapSeparator;
 	}
 }
