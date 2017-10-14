@@ -84,7 +84,7 @@ public class CVizPreProcessTrapProcessor {
 			Pattern trapReceivePattern = Pattern.compile(rule.getTrapReceiveTimePattern());
 			Matcher trapReceiveMatcher = trapReceivePattern.matcher(message);
 			if (!trapReceiveMatcher.find() || trapReceiveMatcher.groupCount() < 1) {
-				logger.info("Cannot match rule " + rule.getRuleName() + " with message ["+ message + "] on receiveTime Pattern.");
+				logger.info("Cannot match " + rule.getRuleName() + " with message ["+ message + "] on receiveTime Pattern.");
 			    continue;
 			}
 			String receiveTime = trapReceiveMatcher.group(1);
@@ -92,6 +92,7 @@ public class CVizPreProcessTrapProcessor {
 			String[] messageTokens = formattedMessage.split(rule.getTrapSeparator());
 			// if not match this rule, continue to next rule and skip the following processing
 			if(!isMessageMatchRule(messageTokens, rule.getTrapConditions())) {
+				logger.info("Cannot match rule " + rule.getRuleName() + " with message ["+ message + "] on conditions.");
 				continue;
 			}
 			
