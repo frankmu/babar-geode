@@ -5,10 +5,11 @@ import com.cviz.geode.pipeline.processor.CompositeRecordProcessor;
 import com.cviz.geode.pipeline.processor.RecordPreProcessor;
 import com.cviz.geode.pipeline.processor.RecordProcessor;
 import com.cviz.geode.pipeline.reader.RecordReader;
-import com.cviz.geode.pipeline.record.Records;
 import com.cviz.geode.pipeline.writer.RecordWriter;
 import com.cviz.geode.pipeline.record.Record;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,12 +47,13 @@ class CvizTask implements Task {
 		return name;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public TaskExecutionResult call() {
 		try {
 			openReader();
 			openWriter();
-			Records processedRecords = readAndProcessRecords();
+			List<Record> processedRecords = readAndProcessRecords();
 			writeRecords(processedRecords);
 		} catch (Exception exception) {
 			fail(exception);
@@ -83,15 +85,16 @@ class CvizTask implements Task {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Records readAndProcessRecords() throws CvizPipelineException {
-		Records processedRecords = new Records();
+	private List<Record> readAndProcessRecords() throws CvizPipelineException {
+		List<Record> processedRecords = new ArrayList<Record>();
 		for (Record record : readRecords()) {
 			processRecord(record, processedRecords);
 		}
 		return processedRecords;
 	}
 
-	private Records readRecords() throws CvizPipelineException {
+	@SuppressWarnings("rawtypes")
+	private List<Record> readRecords() throws CvizPipelineException {
 		try {
 			LOGGER.log(Level.FINE, "Reading records");
 			return recordReader.readRecords();
@@ -101,7 +104,7 @@ class CvizTask implements Task {
 	}
 
 	@SuppressWarnings(value = { "unchecked", "rawtypes" })
-	private void processRecord(Record record, Records records) {
+	private void processRecord(Record record, List<Record> records) {
 		Record processedRecord = null;
 		try {
 			LOGGER.log(Level.FINE, "Processing {0}", record);
@@ -115,7 +118,7 @@ class CvizTask implements Task {
 					LOGGER.log(Level.FINE, "{0} has been filtered", record);
 					metrics.incrementFilteredCount();
 				} else {
-					records.addRecord(processedRecord);
+					records.add(processedRecord);
 				}
 			}
 		} catch (Exception e) {
@@ -124,7 +127,8 @@ class CvizTask implements Task {
 		}
 	}
 
-	private void writeRecords(Records records) throws CvizPipelineException {
+	@SuppressWarnings("rawtypes")
+	private void writeRecords(List<Record> records) throws CvizPipelineException {
 		LOGGER.log(Level.FINE, "Writing {0}", records);
 		try {
 			if (!records.isEmpty()) {

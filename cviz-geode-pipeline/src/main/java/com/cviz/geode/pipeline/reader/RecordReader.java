@@ -1,17 +1,19 @@
 package com.cviz.geode.pipeline.reader;
 
+import java.util.List;
+
 import com.cviz.geode.pipeline.record.Record;
-import com.cviz.geode.pipeline.record.Records;
 
 
 public interface RecordReader {
 
     void open() throws Exception;
 
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	Record readRecord() throws Exception;
 
-	Records readRecords() throws Exception;
+	@SuppressWarnings("rawtypes")
+	List<Record> readRecords() throws Exception;
 
     void close() throws Exception;
 }

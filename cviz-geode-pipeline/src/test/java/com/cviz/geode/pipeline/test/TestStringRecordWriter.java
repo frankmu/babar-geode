@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cviz.geode.pipeline.record.Record;
-import com.cviz.geode.pipeline.record.Records;
 import com.cviz.geode.pipeline.record.StringRecord;
 import com.cviz.geode.pipeline.writer.RecordWriter;
 
@@ -19,7 +18,7 @@ public class TestStringRecordWriter implements RecordWriter{
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void writeRecords(Records records) throws Exception {
+	public void writeRecords(List<Record> records) throws Exception {
 		for(Record record : records) {
 			stringList.add(((StringRecord)record).getPayload());
 		}

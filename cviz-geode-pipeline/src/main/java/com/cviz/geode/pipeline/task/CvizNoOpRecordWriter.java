@@ -1,6 +1,8 @@
 package com.cviz.geode.pipeline.task;
 
-import com.cviz.geode.pipeline.record.Records;
+import java.util.List;
+
+import com.cviz.geode.pipeline.record.Record;
 import com.cviz.geode.pipeline.writer.RecordWriter;
 
 class CvizNoOpRecordWriter implements RecordWriter {
@@ -15,8 +17,9 @@ class CvizNoOpRecordWriter implements RecordWriter {
 
     }
 
-    @Override
-    public void writeRecords(Records batch) throws Exception {
+	@SuppressWarnings("rawtypes")
+	@Override
+    public void writeRecords(List<Record> records) throws Exception {
 
     }
 }

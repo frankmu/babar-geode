@@ -22,5 +22,10 @@
 			<artifactId>geode-core</artifactId>
 			<version>${geode.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cviz-geode</groupId>
+			<artifactId>cviz-geode-pipeline</artifactId>
+			<version>${cviz.version}</version>
+		</dependency>
 	</dependencies>
 </project>

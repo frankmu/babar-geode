@@ -1,8 +1,9 @@
 package com.cviz.geode.pipeline.task;
 
+import java.util.List;
+
 import com.cviz.geode.pipeline.reader.RecordReader;
 import com.cviz.geode.pipeline.record.Record;
-import com.cviz.geode.pipeline.record.Records;
 
 class CvizNoOpRecordReader implements RecordReader {
     @Override
@@ -10,8 +11,8 @@ class CvizNoOpRecordReader implements RecordReader {
 
     }
 
-	@Override
 	@SuppressWarnings("rawtypes")
+	@Override
     public Record readRecord() throws Exception {
         return null;
     }
@@ -21,8 +22,9 @@ class CvizNoOpRecordReader implements RecordReader {
 
     }
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Records readRecords() throws Exception {
+	public List<Record> readRecords() throws Exception {
 		return null;
 	}
 }

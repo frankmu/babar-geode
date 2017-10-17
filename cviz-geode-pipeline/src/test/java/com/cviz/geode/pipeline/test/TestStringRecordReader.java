@@ -1,8 +1,10 @@
 package com.cviz.geode.pipeline.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.cviz.geode.pipeline.reader.RecordReader;
 import com.cviz.geode.pipeline.record.Record;
-import com.cviz.geode.pipeline.record.Records;
 import com.cviz.geode.pipeline.record.StringRecord;
 
 public class TestStringRecordReader implements RecordReader {
@@ -12,18 +14,18 @@ public class TestStringRecordReader implements RecordReader {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Record readRecord() throws Exception {
+	public Record<String> readRecord() throws Exception {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Records readRecords() throws Exception {
-		Records records = new Records();
+	public List<Record> readRecords() throws Exception {
+		List<Record> records = new ArrayList<>();
 		for(int i = 0; i < 10; i++) {
 			StringRecord record = new StringRecord(null, "Hello " + i);
-			records.addRecord(record);
+			records.add(record);
 		}
 		return records;
 	}

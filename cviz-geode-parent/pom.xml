@@ -20,6 +20,7 @@
 	</properties>
 	<modules>
 		<module>../cviz-geode-common</module>
+		<module>../cviz-geode-pipeline</module>
 		<module>../cviz-geode-rest</module>
 		<module>../cviz-geode-preprocess</module>
 		<module>../cviz-geode-corrprocess</module>
