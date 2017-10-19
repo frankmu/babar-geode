@@ -49,4 +49,10 @@ public class CVizPreProcRuleController {
 	public PreProcRule save(@RequestBody PreProcRule preProcRule) {
 		return preProcRuleService.create(preProcRule);
 	}
+
+	@CrossOrigin
+	@RequestMapping(value = "/preprocrules/createdemodata", method = RequestMethod.GET)
+	public void createDemoData() {
+		preProcRuleService.createDemoData();
+	}
 }

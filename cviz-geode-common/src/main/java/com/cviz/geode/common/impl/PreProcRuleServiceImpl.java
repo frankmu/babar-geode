@@ -63,7 +63,11 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 
 	@Override
 	public PreProcRule create(PreProcRule preProcRule) {
-		return save(UUID.randomUUID().toString(), preProcRule);
+		String id = UUID.randomUUID().toString();
+		if(preProcRule.getRuleID() == null) {
+			preProcRule.setRuleID(id);
+		}
+		return save(id, preProcRule);
 	}
 
 	@Override
@@ -71,5 +75,33 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 		Region<String, PreProcRule> region = cvizClientCache.getRegion(CvizGeodeRegionConstant.RegionPreProcRule);
 		PreProcRule preProcRule = region.remove(id);
 		return preProcRule;
+	}
+
+	@Override
+	public void createDemoData() {
+		PreProcRule preProcRule = new PreProcRule();
+		preProcRule.setActive(true);
+		preProcRule.setRuleName("cisco-linkupdown");
+		preProcRule.setRuleType("syslog");
+		preProcRule.setRuleSeq("2");
+		preProcRule.setProcMode("process");
+		preProcRule.setAlertSeverity("1");
+		preProcRule.setReceiveTimeFormat("MMM dd HH:mm:ss");
+		preProcRule.setRuleVariables("{"
+				+ "\"0\": \"receivetime\","
+				+ "\"1\": \"hostname\","
+				+ "\"2\" : \"faulttime\","
+				+ "\"3\" : \"interfacename\""
+				+ "}");
+		preProcRule.setRuleFields("{"
+				+ "\"receiveTime\": \"$receivetime\","
+				+ "\"alertMsg\": \"$hostname on the $interfacename is down at $faulttime\","
+				+ "\"faultTime\" : \"$faulttime\""
+				+ "}");
+
+		preProcRule.setSyslogMatchPattern("^(\\w{3}\\s+\\d{1,2}\\s\\d{2}:\\d{2}:\\d{2})\\s([^\\s]*)\\s\\d+:\\s\\d+:\\s\\*?(\\w{3}\\s+\\d{1,2}\\s\\d{2}:\\d{2}:\\d{2}[^\\s]*): %LINK-3-UPDOWN: Interface ([0-9a-zA-Z\\/]+),.*down$");
+		preProcRule.setSyslogMatchNode(".*");
+
+		create(preProcRule);
 	}
 }

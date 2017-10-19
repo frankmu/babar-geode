@@ -38,6 +38,7 @@ public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 			variables.add(variable);
 	    }
 		Collections.sort(variables);
+		this.ruleVariables = variables;
 	}
 
 	private void populateRuleFields(String jsonString) {
@@ -49,5 +50,6 @@ public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 			variable.setValue(jObject.getString(key));
 			variables.add(variable);
 	    }
+		this.ruleFields = variables;
 	}
 }

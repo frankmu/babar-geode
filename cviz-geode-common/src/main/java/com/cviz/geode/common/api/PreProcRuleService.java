@@ -15,4 +15,7 @@ public interface PreProcRuleService {
 	PreProcRule save(String id, PreProcRule preProcRule);
 
 	PreProcRule remove(String id);
+
+	// TODO remove this service
+	void createDemoData();
 }
