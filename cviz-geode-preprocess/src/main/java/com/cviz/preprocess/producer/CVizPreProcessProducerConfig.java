@@ -12,6 +12,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import com.cviz.geode.common.pipeline.domain.CvizAlertRecord;
+
 
 @Configuration
 public class CVizPreProcessProducerConfig {
@@ -30,12 +32,12 @@ public class CVizPreProcessProducerConfig {
 	}
 
 	@Bean
-	public ProducerFactory<String, String> producerFactory() {
+	public ProducerFactory<String, CvizAlertRecord> producerFactory() {
 		return new DefaultKafkaProducerFactory<>(producerConfigs());
 	}
 
 	@Bean
-	public KafkaTemplate<String, String> kafkaTemplate() {
+	public KafkaTemplate<String, CvizAlertRecord> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
 	}
 

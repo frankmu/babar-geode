@@ -24,7 +24,7 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 		this.receiveTimeFormat = preProcRule.getReceiveTimeFormat();
 		this.trapSeparator = preProcRule.getTrapSeparator();
 		populateRuleVariables(preProcRule.getRuleVariables());
-		populateRuleFields(preProcRule.getRuleVariables());
+		populateRuleFields(preProcRule.getRuleFields());
 		populateTrapRuleConditions(preProcRule.getTrapConditions());
 	}
 

@@ -10,7 +10,7 @@ public class CVizPreProcessTrapRuleCondition implements Condition {
 
 	@Override
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-		String dbname = context.getEnvironment().getProperty("preprocess.rule.type");
-		return dbname.equalsIgnoreCase(CVizPreProcessType.TRAP.toString());
+		String ruleType = context.getEnvironment().getProperty("preprocess.rule.type");
+		return ruleType.equalsIgnoreCase(CVizPreProcessType.TRAP.toString());
 	}
 }

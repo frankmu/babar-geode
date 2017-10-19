@@ -10,7 +10,7 @@ public class CVizPreProcessSyslogRuleCondition implements Condition {
 
 	@Override
 	public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-		String dbname = context.getEnvironment().getProperty("preprocess.rule.type");
-		return dbname.equalsIgnoreCase(CVizPreProcessType.SYSLOG.toString());
+		String ruleType = context.getEnvironment().getProperty("preprocess.rule.type");
+		return ruleType.equalsIgnoreCase(CVizPreProcessType.SYSLOG.toString());
 	}
 }

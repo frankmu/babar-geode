@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -29,10 +30,14 @@ import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMo
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
+import com.cviz.geode.common.api.PreProcRuleService;
+import com.cviz.geode.common.domain.PreProcRule;
 import com.cviz.preprocess.rule.CVizPreProcessType;
+import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogDBRule;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRule;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRuleCondition;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogXMLRule;
+import com.cviz.preprocess.rule.trap.CVizPreProcessTrapDBRule;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRule;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRuleCondition;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapXMLRule;
@@ -60,6 +65,9 @@ public class CVizPreProcessConsumerConfig {
 
 	@Value("${preprocess.rule.source}")
 	private String ruleSource;
+
+	@Autowired
+	private PreProcRuleService preProcRuleService;
 
 	private final Log logger = LogFactory.getLog(CVizPreProcessConsumerConfig.class);
 
@@ -124,7 +132,10 @@ public class CVizPreProcessConsumerConfig {
 				logger.info("Load rule file " + rule.getRuleName());
 				list.add(rule);
 			}
-		}else if(ruleType.equalsIgnoreCase("database")) {
+		}else if(ruleSource.equalsIgnoreCase("database")) {
+			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType("syslog", 100)) {
+				list.add(new CVizPreProcessSyslogDBRule(preProcRule));
+			}
 		}else {
 		}
 		return list;
@@ -143,7 +154,10 @@ public class CVizPreProcessConsumerConfig {
 				logger.info("Load rule file " + rule.getRuleName());
 				list.add(rule);
 			}
-		}else if(ruleType.equalsIgnoreCase("database")) {
+		}else if(ruleSource.equalsIgnoreCase("database")) {
+			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType("trap", 100)) {
+				list.add(new CVizPreProcessTrapDBRule(preProcRule));
+			}
 		}else {
 		}
 		return list;

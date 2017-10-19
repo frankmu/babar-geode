@@ -24,7 +24,7 @@ public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 		this.syslogMatchPattern = preProcRule.getSyslogMatchPattern();
 		this.syslogMatchNode = preProcRule.getSyslogMatchNode();
 		populateRuleVariables(preProcRule.getRuleVariables());
-		populateRuleFields(preProcRule.getRuleVariables());
+		populateRuleFields(preProcRule.getRuleFields());
 		
 	}
 
