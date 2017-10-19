@@ -24,7 +24,7 @@ public class CVizAlertController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/search/findByReceiveTime", method = RequestMethod.GET)
+	@RequestMapping(value = "/alerts/search/findByReceiveTime", method = RequestMethod.GET)
 	public Iterable<Alert> findByReceiveTimeGreaterThanAndReceiveTimeLessThanOrderByReceiveTimeDescLimit(
 			@RequestParam(value = "startTime", required = true) String startTime,
 			@RequestParam(value = "endTime", required = true) String endTime,

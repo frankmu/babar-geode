@@ -78,6 +78,27 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public List<PreProcRule> getAllByRuleType(String ruleType, int limit) {
+		try {
+			// specify the query string
+			String queryString = "<TRACE> SELECT * FROM /" + CvizGeodeRegionConstant.RegionPreProcRule + " WHERE ruleType = $1 LIMIT $2";
+			QueryService queryService = cvizClientCache.getQueryService();
+			Query query = queryService.newQuery(queryString);
+
+			// set query bind parameters
+			Object[] params = { ruleType, limit};
+
+			SelectResults<PreProcRule> result = (SelectResults<PreProcRule>) query.execute(params);
+			return result.asList();
+		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
+				| QueryInvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
 	public void createDemoData() {
 		PreProcRule preProcRule = new PreProcRule();
 		preProcRule.setActive(true);

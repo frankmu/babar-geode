@@ -22,8 +22,14 @@ public class CVizPreProcRuleController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/preprocrules", method = RequestMethod.GET)
-	public List<PreProcRule> getAll(@RequestParam(value = "limit", defaultValue = "50") String limit) {
-		return preProcRuleService.getAll(Integer.parseInt(limit));
+	public List<PreProcRule> getAll(
+			@RequestParam(value = "limit", defaultValue = "50") String limit,
+			@RequestParam(value = "ruleType", required = false) String ruleType) {
+		if(ruleType != null && !"".equals(ruleType)) {
+			return preProcRuleService.getAllByRuleType(ruleType, Integer.parseInt(limit));
+		}else {
+			return preProcRuleService.getAll(Integer.parseInt(limit));
+		}
 	}
 
 	@CrossOrigin
