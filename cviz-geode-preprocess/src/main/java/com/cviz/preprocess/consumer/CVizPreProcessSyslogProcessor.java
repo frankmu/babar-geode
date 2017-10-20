@@ -73,7 +73,7 @@ public class CVizPreProcessSyslogProcessor {
 		try {
 			node = new ObjectMapper().readValue(message, ObjectNode.class);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return node;
 	}

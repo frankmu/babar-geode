@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.query.FunctionDomainException;
@@ -26,6 +28,8 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 	@Autowired
 	private ClientCache cvizClientCache;
 
+	private final Log logger = LogFactory.getLog(PreProcRuleServiceImpl.class);
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PreProcRule> getAll(int limit) {
@@ -43,7 +47,7 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 			return result.asList();
 		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
 				| QueryInvocationTargetException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return Collections.emptyList();
 	}
@@ -93,7 +97,7 @@ public class PreProcRuleServiceImpl implements PreProcRuleService {
 			return result.asList();
 		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
 				| QueryInvocationTargetException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return Collections.emptyList();
 	}

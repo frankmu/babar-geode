@@ -21,5 +21,4 @@ public class CVizPreProcessConsumerSyslogListener extends CVizPreProcessConsumer
 		processor.process();
 		ack.acknowledge();
 	}
-
 }

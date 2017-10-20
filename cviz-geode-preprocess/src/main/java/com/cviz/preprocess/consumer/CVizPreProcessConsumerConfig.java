@@ -41,6 +41,7 @@ import com.cviz.preprocess.rule.trap.CVizPreProcessTrapDBRule;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRule;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRuleCondition;
 import com.cviz.preprocess.rule.trap.CVizPreProcessTrapXMLRule;
+import com.cviz.preprocess.util.CvizPreProcessConstant;
 
 @Configuration
 public class CVizPreProcessConsumerConfig {
@@ -123,8 +124,7 @@ public class CVizPreProcessConsumerConfig {
 	@Conditional(CVizPreProcessSyslogRuleCondition.class)
 	public List<CVizPreProcessSyslogRule> getCVizSyslogEventRule() throws IOException, JAXBException{
 		List<CVizPreProcessSyslogRule> list = new ArrayList<CVizPreProcessSyslogRule>();
-		if(ruleSource.equalsIgnoreCase("file")) {
-			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
+		if(ruleSource.equalsIgnoreCase(CvizPreProcessConstant.CVIZ_PREPROCESS_FILE_RULE_SOURCE)) {
 			for(Resource file : files){
 				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessSyslogXMLRule.class);
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -132,11 +132,13 @@ public class CVizPreProcessConsumerConfig {
 				logger.info("Load rule file " + rule.getRuleName());
 				list.add(rule);
 			}
-		}else if(ruleSource.equalsIgnoreCase("database")) {
-			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType("syslog", 100)) {
+		}else if(ruleSource.equalsIgnoreCase(CvizPreProcessConstant.CVIZ_PREPROCESS_DB_RULE_SOURCE)) {
+			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType(CVizPreProcessType.SYSLOG.toString(), 100)) {
 				list.add(new CVizPreProcessSyslogDBRule(preProcRule));
 			}
-		}else {
+		}
+		if(list.isEmpty()) {
+			logger.error("No syslog pre process rule found. Please add rules and try again.");
 		}
 		return list;
 	}
@@ -145,7 +147,7 @@ public class CVizPreProcessConsumerConfig {
 	@Conditional(CVizPreProcessTrapRuleCondition.class)
 	public List<CVizPreProcessTrapRule> getCVizTrapEventRule() throws IOException, JAXBException{
 		List<CVizPreProcessTrapRule> list = new ArrayList<CVizPreProcessTrapRule>();
-		if(ruleSource.equalsIgnoreCase("file")) {
+		if(ruleSource.equalsIgnoreCase(CvizPreProcessConstant.CVIZ_PREPROCESS_FILE_RULE_SOURCE)) {
 			Assert.notEmpty(files, "No rule files found! Please enter a valid rule file path");
 			for(Resource file : files){
 				JAXBContext jaxbContext = JAXBContext.newInstance(CVizPreProcessTrapXMLRule.class);
@@ -154,11 +156,13 @@ public class CVizPreProcessConsumerConfig {
 				logger.info("Load rule file " + rule.getRuleName());
 				list.add(rule);
 			}
-		}else if(ruleSource.equalsIgnoreCase("database")) {
-			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType("trap", 100)) {
+		}else if(ruleSource.equalsIgnoreCase(CvizPreProcessConstant.CVIZ_PREPROCESS_DB_RULE_SOURCE)) {
+			for(PreProcRule preProcRule : preProcRuleService.getAllByRuleType(CVizPreProcessType.TRAP.toString(), 100)) {
 				list.add(new CVizPreProcessTrapDBRule(preProcRule));
 			}
-		}else {
+		}
+		if(list.isEmpty()) {
+			logger.error("No trap pre process rule found. Please add rules and try again.");
 		}
 		return list;
 	}

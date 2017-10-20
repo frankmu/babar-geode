@@ -46,7 +46,7 @@ public class AlertServiceImpl implements AlertService {
 			return result.asList();
 		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
 				| QueryInvocationTargetException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return Collections.emptyList();
 	}
@@ -68,7 +68,7 @@ public class AlertServiceImpl implements AlertService {
 			return result.asList();
 		} catch (FunctionDomainException | TypeMismatchException | NameResolutionException
 				| QueryInvocationTargetException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return Collections.emptyList();
 	}
@@ -104,5 +104,4 @@ public class AlertServiceImpl implements AlertService {
 		Alert alert = region.remove(id);
 		return alert;
 	}
-
 }
