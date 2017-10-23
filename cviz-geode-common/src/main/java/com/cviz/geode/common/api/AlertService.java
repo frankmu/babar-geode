@@ -2,7 +2,7 @@ package com.cviz.geode.common.api;
 
 import java.util.List;
 
-import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.cache.domain.Alert;
 
 public interface AlertService {
 

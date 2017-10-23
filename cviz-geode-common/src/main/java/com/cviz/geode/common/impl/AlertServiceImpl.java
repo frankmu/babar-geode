@@ -18,8 +18,8 @@ import org.apache.geode.cache.query.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.api.AlertService;
-import com.cviz.geode.common.domain.Alert;
 
 @Service
 public class AlertServiceImpl implements AlertService {

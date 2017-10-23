@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.cviz.corrprocess.pipeline.CvizCorrInputRecordReader;
-import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.pipeline.domain.CvizAlertRecord;
 import com.cviz.geode.pipeline.record.Record;
 import com.cviz.geode.pipeline.task.CvizTaskBuilder;

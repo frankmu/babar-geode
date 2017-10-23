@@ -2,7 +2,7 @@ package com.cviz.geode.common.api;
 
 import java.util.List;
 
-import com.cviz.geode.common.domain.PreProcRule;
+import com.cviz.geode.cache.domain.PreProcRule;
 
 public interface PreProcRuleService {
 

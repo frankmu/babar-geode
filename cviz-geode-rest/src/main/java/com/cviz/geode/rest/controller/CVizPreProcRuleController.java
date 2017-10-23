@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cviz.geode.cache.domain.PreProcRule;
 import com.cviz.geode.common.api.PreProcRuleService;
-import com.cviz.geode.common.domain.PreProcRule;
 
 @RestController
 public class CVizPreProcRuleController {

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.cviz.geode.common.domain.PreProcRule;
+import com.cviz.geode.cache.domain.PreProcRule;
 import com.cviz.preprocess.rule.CVizPreProcessRuleCondition;
 import com.cviz.preprocess.rule.CVizPreProcessRuleField;
 import com.cviz.preprocess.rule.CVizPreProcessRuleVariable;

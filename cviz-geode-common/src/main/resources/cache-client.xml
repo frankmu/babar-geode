@@ -14,7 +14,7 @@
 				org.apache.geode.pdx.ReflectionBasedAutoSerializer
 			</class-name>
 			<parameter name="classes">
-				<string>com.cviz.geode.common.domain.*</string>
+				<string>com.cviz.geode.cache.domain.*</string>
 			</parameter>
 			<parameter name="check-portability">
 				<string>true</string>

@@ -30,8 +30,8 @@ import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMo
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.Assert;
 
+import com.cviz.geode.cache.domain.PreProcRule;
 import com.cviz.geode.common.api.PreProcRuleService;
-import com.cviz.geode.common.domain.PreProcRule;
 import com.cviz.preprocess.rule.CVizPreProcessType;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogDBRule;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRule;

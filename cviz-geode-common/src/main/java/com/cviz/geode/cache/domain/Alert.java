@@ -1,4 +1,4 @@
-package com.cviz.geode.common.domain;
+package com.cviz.geode.cache.domain;
 
 import java.io.Serializable;
 

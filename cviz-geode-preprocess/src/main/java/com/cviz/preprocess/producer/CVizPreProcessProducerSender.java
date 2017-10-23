@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.pipeline.domain.CvizAlertRecord;
 
 public class CVizPreProcessProducerSender {

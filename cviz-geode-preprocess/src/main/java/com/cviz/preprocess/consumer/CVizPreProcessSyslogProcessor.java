@@ -15,8 +15,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.beans.PropertyAccessorFactory;
 
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.api.AlertService;
-import com.cviz.geode.common.domain.Alert;
 import com.cviz.preprocess.producer.CVizPreProcessProducerSender;
 import com.cviz.preprocess.rule.CVizPreProcessRuleField;
 import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRule;

@@ -7,15 +7,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(value="com.cviz.geode.common")
+@ComponentScan({"com.cviz.geode.common", "com.cviz.geode.cache"})
 public class CVizGeodeCommonConfiguration {
 
 	@Bean(destroyMethod = "close")
 	public ClientCache cvizClientCache() {
-		ClientCache clientCache = new ClientCacheFactory().set("name", "CVizClientCache")
-														  .set("cache-xml-file", "cache-client.xml")
-														  .create();
+		ClientCache clientCache = new ClientCacheFactory()
+				.set("name", "CVizClientCache")
+				.set("cache-xml-file", "cache-client.xml")
+				.create();
 		return clientCache;
 	}
-
 }

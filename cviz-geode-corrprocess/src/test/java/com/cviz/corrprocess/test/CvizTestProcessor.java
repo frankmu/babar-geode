@@ -1,6 +1,6 @@
 package com.cviz.corrprocess.test;
 
-import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.pipeline.domain.CvizAlertRecord;
 import com.cviz.geode.pipeline.processor.RecordFilter;
 

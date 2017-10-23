@@ -1,4 +1,4 @@
-package com.cviz.geode.common.api;
+package com.cviz.geode.cache.util;
 
 public final class CvizGeodeRegionConstant {
 	public static final String RegionAlert = "alert";

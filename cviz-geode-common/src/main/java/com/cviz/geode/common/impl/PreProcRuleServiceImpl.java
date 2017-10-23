@@ -18,9 +18,9 @@ import org.apache.geode.cache.query.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cviz.geode.common.api.CvizGeodeRegionConstant;
+import com.cviz.geode.cache.domain.PreProcRule;
+import com.cviz.geode.cache.util.CvizGeodeRegionConstant;
 import com.cviz.geode.common.api.PreProcRuleService;
-import com.cviz.geode.common.domain.PreProcRule;
 
 @Service
 public class PreProcRuleServiceImpl implements PreProcRuleService {

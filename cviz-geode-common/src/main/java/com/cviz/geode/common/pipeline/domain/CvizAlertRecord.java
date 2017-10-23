@@ -1,6 +1,6 @@
 package com.cviz.geode.common.pipeline.domain;
 
-import com.cviz.geode.common.domain.Alert;
+import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.pipeline.record.Header;
 import com.cviz.geode.pipeline.record.Record;
 
