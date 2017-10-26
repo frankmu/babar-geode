@@ -22,6 +22,7 @@ public class Alert implements Serializable{
 	private Long alertCloseTime;		//告警关闭时间 (告警恢复时间)
 	private Integer severity = 1; 	//告警级别 (critical，major，minor，warning，normal，unkonwn)
 	private String alertKey; 		//提取的标签，例如interface, linkup, linkdown...
+	private String compressKey;		//压缩字段
 	private String matchPrePolicy; 	//匹配的预处理策略 (1对多)
 	private String matchRelPolicy;	//匹配的关联处理策略 (1对多) (如果做关联高级处理的话)
 	private String enrichInfo; 		//丰富信息
@@ -123,6 +124,12 @@ public class Alert implements Serializable{
 	}
 	public void setAlertKey(String alertKey) {
 		this.alertKey = alertKey;
+	}
+	public String getCompressKey() {
+		return compressKey;
+	}
+	public void setCompressKey(String compressKey) {
+		this.compressKey = compressKey;
 	}
 	public String getMatchPrePolicy() {
 		return matchPrePolicy;
