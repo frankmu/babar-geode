@@ -27,6 +27,9 @@
 	<region name="alert">
 		<region-attributes refid="alertAttributes" />
 	</region>
+	<region name="alerthistory">
+		<region-attributes refid="alertAttributes" />
+	</region>
 	<region name="preprocrule">
 		<region-attributes refid="alertAttributes" />
 	</region>

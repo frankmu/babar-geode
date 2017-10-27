@@ -112,6 +112,11 @@ public class CVizPreProcessSyslogProcessor {
 						}
 						myAccessor.setPropertyValue(field.getKey(), value);
 					}
+					String compressKey = alert.getCompressKey();
+					if( compressKey == null || compressKey.isEmpty()) {
+						compressKey = alert.getAlertObj() + alert.getAlertMsg();
+					}
+					alert.setCompressKey(String.valueOf(compressKey.hashCode()));
 					newAlerts.add(alert);
 					break;
 				}

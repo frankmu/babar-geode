@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.geode.cache.CacheTransactionManager;
 import org.apache.geode.cache.Region;
+import org.apache.geode.cache.TransactionException;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.query.FunctionDomainException;
 import org.apache.geode.cache.query.NameResolutionException;
@@ -16,13 +17,20 @@ import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cviz.geode.cache.domain.Alert;
+import com.cviz.geode.cache.domain.AlertHistory;
+import com.cviz.geode.cache.util.CvizGeodeRegionConstant;
 import com.cviz.geode.common.api.AlertService;
+import com.cviz.geode.common.util.AlertHistoryBuilder;
 
 @Service
 public class AlertServiceImpl implements AlertService {
+
+	@Value("${geode.max.transaction.failures:10}")
+	private int MAX_TRANSACTION_FAILURES;
 
 	@Autowired
 	private ClientCache cvizClientCache;
@@ -75,7 +83,7 @@ public class AlertServiceImpl implements AlertService {
 
 	@Override
 	public Alert save(String id, Alert alert) {
-		Region<String, Alert> region = cvizClientCache.getRegion("alert");
+		Region<String, Alert> region = cvizClientCache.getRegion(CvizGeodeRegionConstant.RegionAlert);
 		region.put(id, alert);
 		return alert;
 	}
@@ -83,19 +91,41 @@ public class AlertServiceImpl implements AlertService {
 	@Override
 	public boolean saveAll(List<Alert> alerts) {
 		CacheTransactionManager txManager = cvizClientCache.getCacheTransactionManager();
-		Region<String, Alert> region = cvizClientCache.getRegion("alert");
-		try {
+		Region<String, Alert> alertRegion = cvizClientCache.getRegion(CvizGeodeRegionConstant.RegionAlert);
+		Region<String, AlertHistory> alertHistoryRegion = cvizClientCache.getRegion(CvizGeodeRegionConstant.RegionAlertHistory);
+
+		int failureCount = 0;
+		while (true) {
 			txManager.begin();
-			for (Alert alert : alerts) {
-				region.put(alert.getAlertUID(), alert);
+			try {
+				for (Alert alert : alerts) {
+					if (alertRegion.containsValueForKey(alert.getCompressKey())) {
+						// Update active alert record in alert region
+						Alert newAlert = alertRegion.get(alert.getCompressKey());
+						newAlert.setAlertTally(newAlert.getAlertTally() + 1);
+						alertRegion.put(alert.getCompressKey(), newAlert);
+
+						// Insert alert history record to alerthistory region
+						AlertHistory alertHistory = AlertHistoryBuilder.createAlertHistory(alert);
+						alertHistoryRegion.put(alertHistory.getAlertUID(), alertHistory);
+					} else {
+						alert.setAlertTally(0);
+						alertRegion.put(alert.getCompressKey(), alert);
+					}
+				}
+				txManager.commit();
+				return true;
+			} catch (TransactionException e) {
+				if (txManager.exists()) {
+					txManager.rollback();
+				}
+				logger.info("Detect commit conflict, will retry.");
+
+				if (++failureCount > MAX_TRANSACTION_FAILURES) {
+					return false;
+				}
 			}
-			txManager.commit();
-			return true;
-		} catch (Exception e) {
-			txManager.rollback();
-			logger.error(e.getStackTrace());
 		}
-		return false;
 	}
 
 	@Override
