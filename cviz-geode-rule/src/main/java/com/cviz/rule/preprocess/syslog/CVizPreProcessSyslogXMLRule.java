@@ -1,4 +1,4 @@
-package com.cviz.preprocess.rule.trap;
+package com.cviz.rule.preprocess.syslog;
 
 import java.util.List;
 
@@ -6,12 +6,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.cviz.preprocess.rule.CVizPreProcessRuleCondition;
-import com.cviz.preprocess.rule.CVizPreProcessRuleField;
-import com.cviz.preprocess.rule.CVizPreProcessRuleVariable;
+import com.cviz.rule.preprocess.CVizPreProcessRuleField;
+import com.cviz.rule.preprocess.CVizPreProcessRuleVariable;
 
 @XmlRootElement(name="rule", namespace="http://www.example.org/cviz-rule")
-public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
+public class CVizPreProcessSyslogXMLRule extends CVizPreProcessSyslogRule {
 
 	@Override
 	@XmlElement(name="name", namespace="http://www.example.org/cviz-rule")
@@ -49,12 +48,6 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 		this.receiveTimeFormat = receiveTimeFormat;
 	}
 
-	@Override
-	@XmlElement(name="trap-receivetime-pattern", namespace="http://www.example.org/cviz-rule")
-	public void setTrapReceiveTimePattern(String trapReceiveTimePattern) {
-		this.trapReceiveTimePattern = trapReceiveTimePattern;
-	}
-
 	public List<CVizPreProcessRuleVariable> getRuleVariables() {
 		return ruleVariables;
 	}
@@ -77,20 +70,15 @@ public class CVizPreProcessTrapXMLRule extends CVizPreProcessTrapRule {
 		this.ruleFields = ruleFields;
 	}
 
-	public List<CVizPreProcessRuleCondition> getTrapConditions() {
-		return trapConditions;
+	@Override
+	@XmlElement(name="match-pattern", namespace="http://www.example.org/cviz-rule")
+	public void setSyslogMatchPattern(String syslogMatchPattern) {
+		this.syslogMatchPattern = syslogMatchPattern;
 	}
 
 	@Override
-	@XmlElementWrapper(name = "conditions", namespace="http://www.example.org/cviz-rule")
-	@XmlElement(name="condition", namespace="http://www.example.org/cviz-rule")
-	public void setTrapConditions(List<CVizPreProcessRuleCondition> trapConditions) {
-		this.trapConditions = trapConditions;
-	}
-
-	@Override
-	@XmlElement(name="trap-seperator", namespace="http://www.example.org/cviz-rule")
-	public void setTrapSeparator(String trapSeparator) {
-		this.trapSeparator = trapSeparator;
+	@XmlElement(name="node-name", namespace="http://www.example.org/cviz-rule")
+	public void setNodeName(String syslogMatchNode) {
+		this.syslogMatchNode = syslogMatchNode;
 	}
 }

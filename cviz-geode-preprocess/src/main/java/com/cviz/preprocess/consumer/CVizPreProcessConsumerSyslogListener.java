@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 
-import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRule;
+import com.cviz.rule.preprocess.syslog.CVizPreProcessSyslogRule;
 
 public class CVizPreProcessConsumerSyslogListener extends CVizPreProcessConsumerListener{
 

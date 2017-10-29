@@ -8,35 +8,19 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../cviz-geode-parent/pom.xml</relativePath>
 	</parent>
-	<artifactId>cviz-geode-preprocess</artifactId>
+	<artifactId>cviz-geode-rule</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>cviz-geode</groupId>
-			<artifactId>cviz-geode-rule</artifactId>
+			<artifactId>cviz-geode-common</artifactId>
 			<version>${cviz.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-			<version>${spring-kafka.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<version>${springboot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-			<version>${springboot.version}</version>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>${org.json.version}</version>
 		</dependency>
 	</dependencies>
 

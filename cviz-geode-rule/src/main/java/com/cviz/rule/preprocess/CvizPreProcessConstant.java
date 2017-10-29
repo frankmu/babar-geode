@@ -1,4 +1,4 @@
-package com.cviz.preprocess.util;
+package com.cviz.rule.preprocess;
 
 public final class CvizPreProcessConstant {
 	public static final String CVIZ_PREPROCESS_FILE_RULE_SOURCE = "file";

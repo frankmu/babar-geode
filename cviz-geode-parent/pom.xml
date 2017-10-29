@@ -19,8 +19,9 @@
 		<org.json.version>20170516</org.json.version>
 	</properties>
 	<modules>
-		<module>../cviz-geode-common</module>
 		<module>../cviz-geode-pipeline</module>
+		<module>../cviz-geode-common</module>
+		<module>../cviz-geode-rule</module>
 		<module>../cviz-geode-rest</module>
 		<module>../cviz-geode-preprocess</module>
 		<module>../cviz-geode-corrprocess</module>

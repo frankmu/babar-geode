@@ -1,9 +1,9 @@
-package com.cviz.preprocess.rule.trap;
+package com.cviz.rule.preprocess.trap;
 
 import java.util.List;
 
-import com.cviz.preprocess.rule.CVizPreProcessRule;
-import com.cviz.preprocess.rule.CVizPreProcessRuleCondition;
+import com.cviz.rule.preprocess.CVizPreProcessRule;
+import com.cviz.rule.preprocess.CVizPreProcessRuleCondition;
 
 public class CVizPreProcessTrapRule extends CVizPreProcessRule {
 

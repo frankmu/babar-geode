@@ -1,4 +1,4 @@
-package com.cviz.preprocess.rule.trap;
+package com.cviz.rule.preprocess.syslog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,13 +7,12 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.cviz.geode.cache.domain.PreProcRule;
-import com.cviz.preprocess.rule.CVizPreProcessRuleCondition;
-import com.cviz.preprocess.rule.CVizPreProcessRuleField;
-import com.cviz.preprocess.rule.CVizPreProcessRuleVariable;
+import com.cviz.rule.preprocess.CVizPreProcessRuleField;
+import com.cviz.rule.preprocess.CVizPreProcessRuleVariable;
 
-public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
+public class CVizPreProcessSyslogDBRule extends CVizPreProcessSyslogRule {
 
-	public CVizPreProcessTrapDBRule(PreProcRule preProcRule) {
+	public CVizPreProcessSyslogDBRule(PreProcRule preProcRule) {
 		this.ruleID = preProcRule.getRuleID();
 		this.active = preProcRule.getActive();
 		this.ruleName = preProcRule.getRuleName();
@@ -22,10 +21,11 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 		this.procMode = preProcRule.getProcMode();
 		this.alertSeverity = Integer.parseInt(preProcRule.getAlertSeverity());
 		this.receiveTimeFormat = preProcRule.getReceiveTimeFormat();
-		this.trapSeparator = preProcRule.getTrapSeparator();
+		this.syslogMatchPattern = preProcRule.getSyslogMatchPattern();
+		this.syslogMatchNode = preProcRule.getSyslogMatchNode();
 		populateRuleVariables(preProcRule.getRuleVariables());
 		populateRuleFields(preProcRule.getRuleFields());
-		populateTrapRuleConditions(preProcRule.getTrapConditions());
+		
 	}
 
 	private void populateRuleVariables(String jsonString) {
@@ -43,25 +43,13 @@ public class CVizPreProcessTrapDBRule extends CVizPreProcessTrapRule {
 
 	private void populateRuleFields(String jsonString) {
 		JSONObject jObject = new JSONObject(jsonString);
-		List<CVizPreProcessRuleField> fields = new ArrayList<CVizPreProcessRuleField>();
+		List<CVizPreProcessRuleField> variables = new ArrayList<CVizPreProcessRuleField>();
 		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleField field = new CVizPreProcessRuleField();
-			field.setKey(key);
-			field.setValue(jObject.getString(key));
-			fields.add(field);
+			CVizPreProcessRuleField variable = new CVizPreProcessRuleField();
+			variable.setKey(key);
+			variable.setValue(jObject.getString(key));
+			variables.add(variable);
 	    }
-		this.ruleFields = fields;
-	}
-
-	private void populateTrapRuleConditions(String jsonString) {
-		JSONObject jObject = new JSONObject(jsonString);
-		List<CVizPreProcessRuleCondition> conditions = new ArrayList<CVizPreProcessRuleCondition>();
-		for (String key : jObject.keySet()) {
-			CVizPreProcessRuleCondition condition = new CVizPreProcessRuleCondition();
-			condition.setIndex(key);
-			condition.setValue(jObject.getString(key));
-			conditions.add(condition);
-	    }
-		this.trapConditions = conditions;
+		this.ruleFields = variables;
 	}
 }

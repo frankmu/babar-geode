@@ -18,10 +18,10 @@ import org.springframework.beans.PropertyAccessorFactory;
 import com.cviz.geode.cache.domain.Alert;
 import com.cviz.geode.common.api.AlertService;
 import com.cviz.preprocess.producer.CVizPreProcessProducerSender;
-import com.cviz.preprocess.rule.CVizPreProcessRuleCondition;
-import com.cviz.preprocess.rule.CVizPreProcessRuleField;
-import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRule;
 import com.cviz.preprocess.util.CvizPreProcessUtils;
+import com.cviz.rule.preprocess.CVizPreProcessRuleCondition;
+import com.cviz.rule.preprocess.CVizPreProcessRuleField;
+import com.cviz.rule.preprocess.trap.CVizPreProcessTrapRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

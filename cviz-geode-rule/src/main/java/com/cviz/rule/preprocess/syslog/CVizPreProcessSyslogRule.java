@@ -1,6 +1,6 @@
-package com.cviz.preprocess.rule.syslog;
+package com.cviz.rule.preprocess.syslog;
 
-import com.cviz.preprocess.rule.CVizPreProcessRule;
+import com.cviz.rule.preprocess.CVizPreProcessRule;
 
 public class CVizPreProcessSyslogRule extends CVizPreProcessRule {
 

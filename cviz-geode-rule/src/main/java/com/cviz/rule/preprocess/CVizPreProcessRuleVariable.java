@@ -1,4 +1,4 @@
-package com.cviz.preprocess.rule;
+package com.cviz.rule.preprocess;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;

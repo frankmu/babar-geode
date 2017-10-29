@@ -13,9 +13,9 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.cviz.preprocess.rule.CVizPreProcessRuleField;
-import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogRule;
-import com.cviz.preprocess.rule.syslog.CVizPreProcessSyslogXMLRule;
+import com.cviz.rule.preprocess.CVizPreProcessRuleField;
+import com.cviz.rule.preprocess.syslog.CVizPreProcessSyslogRule;
+import com.cviz.rule.preprocess.syslog.CVizPreProcessSyslogXMLRule;
 
 @Controller
 public class CVizTestController {

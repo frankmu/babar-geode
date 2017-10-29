@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 
-import com.cviz.preprocess.rule.trap.CVizPreProcessTrapRule;
+import com.cviz.rule.preprocess.trap.CVizPreProcessTrapRule;
 
 public class CVizPreProcessConsumerTrapListener extends CVizPreProcessConsumerListener{
 

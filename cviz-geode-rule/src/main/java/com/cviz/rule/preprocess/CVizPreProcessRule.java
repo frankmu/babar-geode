@@ -1,4 +1,4 @@
-package com.cviz.preprocess.rule;
+package com.cviz.rule.preprocess;
 
 import java.util.List;
 
