@@ -2,8 +2,7 @@ package com.cviz.geode.pipeline.processor;
 
 import com.cviz.geode.pipeline.record.Record;
 
-@SuppressWarnings("rawtypes")
-public interface RecordFilter<R extends Record> extends RecordPreProcessor<R, R> {
+public interface RecordFilter<R extends Record<?>> extends RecordPreProcessor<R, R> {
 
     @Override
     R processRecord(R record);
